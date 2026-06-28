@@ -1,87 +1,68 @@
 # Tony Project Status
 
-**Status: V1_PIVOT_APPROVED**
+**Status: V1_PHASE_1_COMPLETE**
 
-**Last Updated:** June 28, 2026  
-**Last Agent:** ChatGPT — CTO / Product Owner  
-**Current Phase:** Pivot from LINE Interception to Buildable Tony V1
+**Last Updated:** June 28, 2026
+**Last Agent:** ChatGPT - iOS Engineer
+**Current Phase:** Revised Tony V1 Phase 1 complete
 
 ---
 
 ## Decision
 
-The LINE auto-notification interception function is skipped for now.
+Phase 1 of the revised Tony V1 MVP is complete.
 
-Reason: It depends on physical-device validation with Mac + Xcode + iPhone running iOS 27 beta. This is too much platform/hardware dependency for the next step.
-
-The previous tracer bullet remains valuable research, but it is no longer blocking Tony V1.
+Tony now has a buildable iOS 17+ SwiftUI foundation for the Manual AI Inbox. This phase intentionally avoids LLM calls, Morning Brief logic, Share Extension ingestion, LINE notification interception, and VIP filtering.
 
 See:
 - `docs/V1_PIVOT_DECISION.md`
-- `docs/REALITY_VALIDATION.md`
-- `ios/TonyTracerBullet/`
+- `docs/V1_REVISED_MVP.md`
+- `ios/TonyV1/`
 
 ---
 
 ## What is Done
 
-- Product vision is complete.
-- Tony v1 LINE VIP Filter research is complete.
-- Reality Validation is complete.
-- Tracer Bullet Swift source is committed.
-- CTO has approved pivoting away from LINE auto-interception for now.
+- Created a new iOS 17+ SwiftUI project at `ios/TonyV1/`.
+- Implemented a pure black Calm UI shell with white typography and no tab bar.
+- Added SwiftData local persistence.
+- Added `InboxItem` model with:
+  - `rawText`
+  - `domain`
+  - `urgency`
+  - `actionState`
+  - `createdAt`
+- Added one text input field for manual capture.
+- Added one voice dictation button using `SFSpeechRecognizer`.
+- Added a list view showing locally captured inbox items.
+- Added speech and microphone permission strings in `Info.plist`.
 
 ---
 
-## What is NOT Being Built Now
+## What is NOT Built Yet
 
-Do not build:
+Do not treat any of these as complete:
 
-- Physical iPhone Test
+- LLM API integration
+- Morning Brief
+- Share Extension
 - LINE notification interception
-- VIP LINE Filter
-- LLM summarization of LINE notification streams
-- iOS 27 beta dependency
-- Week 2 VIP Filter
-
----
-
-## New Tony V1 Direction
-
-Tony V1 becomes:
-
-**Manual / Shortcut-first AI Inbox + Morning Brief**
-
-The first usable Tony should help พี่คอม capture, classify, summarize, and decide what matters without requiring system-level notification interception.
-
----
-
-## New V1 Core
-
-1. AI Inbox
-2. Morning Brief
-3. Decision Queue
-4. Voice-to-Action Draft
-5. Mobile-only Calm UI
+- VIP Filter
 
 ---
 
 ## Next Step
 
-Create the revised Tony V1 MVP definition based on the pivot.
+LLM API Integration.
 
 Read:
-- `docs/V1_PIVOT_DECISION.md`
-
-Then create:
+- `docs/NEXT_ACTION.md`
 - `docs/V1_REVISED_MVP.md`
-- update `docs/NEXT_ACTION.md`
-- update `docs/CEO_SUMMARY.md`
 
-Do not write production code yet.
+Then connect captured `InboxItem.rawText` to the first classification pass and persist returned `domain`, `urgency`, and `actionState` locally.
 
 ---
 
 ## Confidence Level
 
-High. The project is no longer blocked by iOS 27 hardware validation and can proceed toward a buildable mobile-first MVP.
+High. The project has moved from pivot approval to a concrete local iOS app foundation that can support the next intelligence layer.

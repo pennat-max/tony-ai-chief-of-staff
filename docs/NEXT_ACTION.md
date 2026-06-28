@@ -4,26 +4,29 @@
 
 ---
 
-## Build Phase 1 of the Revised MVP: The Calm UI Shell & Local Store
+## LLM API Integration
 
-**What:** Create the foundation of the new Tony V1 iOS app based on the manual AI Inbox pivot.
+**What:** Add the first LLM classification pass for the local Tony V1 AI Inbox.
 
-**Context:** We have pivoted away from automatic LINE interception. Read `docs/V1_PIVOT_DECISION.md` and `docs/V1_REVISED_MVP.md` before starting.
+**Context:** Phase 1 is complete. The app already captures manual text and voice dictation into SwiftData as `InboxItem` records. The next step is to classify each captured item without changing the product scope.
 
 **Steps:**
-1. Open Xcode and create a new SwiftUI project (iOS 17+).
-2. Implement the **Calm UI** design language: Pure black background, white text, no tab bars.
-3. Build the core SwiftData models for the AI Inbox (`InboxItem` with properties for raw text, domain, urgency, and action state).
-4. Build the three primary input methods in the UI:
-   - A simple text field.
-   - A Voice Dictation button (using `SFSpeechRecognizer`).
-   - *Note: The iOS Share Extension will be a separate phase.*
-5. Build the basic list view to display captured items.
+1. Open `ios/TonyV1/TonyV1.xcodeproj`.
+2. Add an LLM client layer for classifying `InboxItem.rawText`.
+3. Send raw text to the chosen API with a strict JSON response contract.
+4. Parse and persist:
+   - `domain`
+   - `urgency`
+   - `actionState`
+5. Keep all existing captures in SwiftData.
+6. Surface classification values in the existing list view.
 
 **Do NOT:**
-- Do not integrate the LLM API yet. Just save the raw text locally.
 - Do not build the Morning Brief yet.
-- Do not attempt any notification interception.
+- Do not build the Share Extension yet.
+- Do not attempt LINE notification interception.
+- Do not build the VIP Filter.
+- Do not add push notifications or background automation.
 
 **When complete:**
-Update `STATUS.md` to `V1_PHASE_1_COMPLETE` and set the next action to LLM API Integration.
+Update `docs/STATUS.md`, `docs/NEXT_ACTION.md`, and `docs/CHANGELOG.md`.
