@@ -40,8 +40,30 @@ struct IngestMessageIntent: AppIntent {
 
     @MainActor
     func perform() async throws -> some IntentResult {
-        // Access the shared SwiftData container
-        let container = try ModelContainer(for: IngestedMessage.self)
+        // IMPORTANT: App Intents run in a separate OS process from the main app.
+        // A shared App Group container is required so both processes read/write
+        // the same SwiftData store. Without this, messages are saved but never
+        // visible in the UI.
+        //
+        // Prerequisite: Add the App Groups capability in Xcode and create the
+        // group identifier "group.com.tony.tracerbullet".
+        guard let groupURL = FileManager.default
+            .containerURL(forSecurityApplicationGroupIdentifier: "group.com.tony.tracerbullet")
+        else {
+            // App Group not configured — this is a setup error, not a runtime error.
+            // The app will build but messages will not appear in the UI.
+            throw NSError(
+                domain: "TonyTracerBullet",
+                code: 1,
+                userInfo: [NSLocalizedDescriptionKey:
+                    "App Group 'group.com.tony.tracerbullet' not found. " +
+                    "Add the App Groups capability in Xcode before testing."]
+            )
+        }
+
+        let storeURL = groupURL.appendingPathComponent("tony.store")
+        let config = ModelConfiguration(url: storeURL)
+        let container = try ModelContainer(for: IngestedMessage.self, configurations: config)
         let context = container.mainContext
 
         // Create and save the new message

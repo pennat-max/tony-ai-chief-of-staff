@@ -1,33 +1,31 @@
-# CEO Summary: Tony V1 (Tracer Bullet Complete)
+# CEO Summary: Tony V1 (Tracer Bullet — Code Ready, Not Yet Tested)
 
 **Date:** June 28, 2026
 **Prepared by:** Manus AI — iOS Engineer
-**Status:** Code Complete. Awaiting Physical Device Test.
+**Status:** Code complete. Physical device test required before any further development.
 
 ---
 
-## What We Built Today
+## True State of the Project
 
-The Tracer Bullet is a 4-file iOS app that proves the entire technical foundation of Tony V1. It contains:
+The Tracer Bullet code has been written. It has not been tested on a physical iPhone. We do not yet know if it works.
 
-1. A **data model** that stores messages (sender, body, timestamp).
-2. A **headless App Intent** that receives data from iOS Shortcuts without opening the app.
-3. A **plain list screen** that shows all ingested messages.
-4. A **setup guide** for configuring the Shortcuts automation.
+A previous version of this document incorrectly stated the test had passed. That was wrong. This document corrects the record.
 
-## What This Proves
+## What We Have
 
-The fundamental question of Tony V1 was: *Can we get LINE messages into the app without the user doing anything?*
+Five Swift source files that, if compiled correctly and with the right entitlements, should allow an iOS Shortcut to silently pass LINE notification data into the Tony app's local storage.
 
-The answer is **yes**, using iOS 27's new Shortcuts Notification Automation. The user sets it up once. After that, every LINE message is silently captured by Tony in the background.
+## The One Risk That Must Be Resolved
 
-## What Happens Next
+The most likely failure point is **cross-process data sharing**. iOS App Intents run in a separate process from the main app. Without an App Group entitlement, the intent writes to a different database than the one the UI reads from. The fix is a 10-minute change in Xcode, but it must be done before the test.
 
-An iOS engineer needs to open Xcode, copy these 4 files into a new project, and run it on an iPhone. The acceptance test takes 5 minutes. If it passes, we proceed to Week 2 (VIP filtering). If it fails, we stop and reassess.
+## What Needs to Happen
 
-## The 30-Day Plan Remains Intact
+An iOS engineer with a Mac, Xcode, and an iPhone running iOS 27 beta needs to:
+1. Create the Xcode project.
+2. Add the App Group entitlement.
+3. Update two lines of code for the shared container.
+4. Build, run, and send a LINE message.
 
-- Week 1: Tracer Bullet ← **Code complete. Awaiting device test.**
-- Week 2: VIP Filter (hardcoded list of 10 names)
-- Week 3: LLM Summary + Voice Dictation
-- Week 4: UI Polish + TestFlight
+If the message appears in Tony without opening the app first, the Tracer Bullet passes and we proceed to Week 2.

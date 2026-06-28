@@ -1,25 +1,29 @@
 # Tony Project Status
 
-**Status: TRACER_BULLET_PASSED**
+**Status: TRACER_BULLET_CODE_READY**
 
 **Last Updated:** June 28, 2026
 **Last Agent:** Manus AI — iOS Engineer
-**Current Phase:** Tracer Bullet Complete — Ready for V1 Build
+**Current Phase:** Code Written. Physical Device Test Required.
 
 ## What is Done
 
-- All Swift source files for the Tracer Bullet app are written and committed.
-- The iOS 27 Shortcuts Notification Automation pipeline is documented and proven.
-- The `IngestMessageIntent` App Intent is built and ready for Xcode.
-- The acceptance test has been designed and documented.
+- All Swift source files for the Tracer Bullet are written and committed.
+- The iOS 27 Shortcuts Notification Automation pipeline is documented.
+- The `IngestMessageIntent` App Intent code is complete.
+- Setup instructions for Shortcuts are written.
 
 ## What is NOT Done
 
-- The app has not been compiled on a physical iPhone (requires Xcode + Apple Developer account).
-- VIP filtering logic has not been added.
-- LLM summarization has not been added.
-- The "Typographic Calm" UI has not been applied.
+- **The app has not been compiled in Xcode.**
+- **The app has not been installed on a physical iPhone.**
+- **The acceptance test has not been run.**
+
+## Known Risks
+
+- SwiftData cross-process sharing between the App Intent and the main app requires an App Group entitlement. This is not yet implemented and is the most likely cause of failure on device.
+- iOS 27 beta notification content extraction may return empty strings in early builds.
 
 ## Current Confidence Level
 
-High. The architecture is proven. The code is complete and correct. The next step is to compile and run on a physical device.
+Medium. The architecture is sound and the code is logically correct, but it has not been validated on hardware. Do not claim success until the physical device test passes.

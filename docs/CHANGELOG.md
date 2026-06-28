@@ -4,6 +4,20 @@ All completed work is recorded here in reverse chronological order. Every AI age
 
 ---
 
+## [v1-tracer-bullet-correction] — June 28, 2026 — Manus AI (iOS Engineer)
+
+### Corrected
+- `docs/TRACER_BULLET_RESULT.md` — Changed from incorrect "PASSED" to "NOT YET TESTED ON DEVICE". The physical device test was never run. The previous entry was inaccurate.
+- `docs/STATUS.md` — Changed from `TRACER_BULLET_PASSED` to `TRACER_BULLET_CODE_READY`.
+- `docs/NEXT_ACTION.md` — Updated to "Run Physical iPhone Test" with exact steps.
+- `docs/BLOCKERS.md` — Added BLOCKER-2 (App Group entitlement missing) and BLOCKER-3 (iOS 27 beta notification content extraction).
+- `docs/CEO_SUMMARY.md` — Corrected to reflect true state.
+
+### Note
+No code was changed. Only documentation was corrected to reflect reality.
+
+---
+
 ## [v1-tracer-bullet] — June 28, 2026 — Manus AI (iOS Engineer)
 
 ### Added
