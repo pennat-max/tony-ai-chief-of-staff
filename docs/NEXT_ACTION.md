@@ -4,44 +4,21 @@
 
 ---
 
-## Overnight Tony V1 Offline Hardening
+## Local Mac Xcode QA
 
-Read first:
+**What:** Validate the hardened Tony V1 offline MVP in Xcode.
 
-- `docs/OVERNIGHT_AGENT_MISSION.md`
-- `docs/STATUS.md`
-- `docs/V1_MOCK_MVP_QA.md`
-- `ios/TonyV1/`
+**Context:** Safe offline hardening is complete. The app still uses SwiftData and `MockProvider` only. It has no API keys, `.env.local`, network provider, backend, login, cloud sync, LINE interception, VIP filter, push notifications, Share Extension, Image OCR, or Calendar integration.
 
-## Mission
+**Steps:**
+1. Open `ios/TonyV1/TonyV1.xcodeproj` on macOS with Xcode.
+2. Build the `TonyV1` target for an iOS 17+ simulator or device.
+3. Run the manual QA checklist in `docs/V1_MOCK_MVP_QA.md`.
+4. Record any Xcode-only compile/runtime issues in `docs/BLOCKERS.md`.
 
-Continue working until morning on safe offline hardening only.
-
-Complete as much as possible from `docs/OVERNIGHT_AGENT_MISSION.md`.
-
-## Do NOT
-
+**Do NOT:**
 - Do not request API keys.
 - Do not create `.env.local`.
 - Do not add OpenAI, Claude, Gemini, or any network provider.
 - Do not add backend, login, cloud sync, LINE interception, VIP filter, push notifications, or background automation.
 - Do not rewrite the app from scratch.
-
-## When Complete
-
-Update:
-
-- `docs/STATUS.md`
-- `docs/NEXT_ACTION.md`
-- `docs/CHANGELOG.md`
-- `docs/V1_MOCK_MVP_QA.md`
-
-Set final status to one of:
-
-- `V1_OFFLINE_MVP_HARDENED`
-- `V1_OFFLINE_MVP_PARTIAL_HARDENING`
-- `V1_BLOCKED_NEEDS_MAC_XCODE`
-
-If blocked, update `docs/BLOCKERS.md`.
-
-Do not stop after one small change. Continue through the work queue until no more safe offline work remains.

@@ -4,6 +4,25 @@ All completed work is recorded here in reverse chronological order. Every AI age
 
 ---
 
+## [v1-offline-mvp-hardened] - June 28, 2026 - ChatGPT (iOS Engineer)
+
+### Changed
+- `ios/TonyV1/TonyV1/Models/InboxItem.swift` - Added model helpers for display summary, active state, decision eligibility, and item actions.
+- `ios/TonyV1/TonyV1/Services/MockProvider.swift` - Centralized mock domain, urgency, and action-state constants and improved deterministic classification priority.
+- `ios/TonyV1/TonyV1/Services/MorningBriefService.swift` - Hardened local brief logic with active/later counts and shared decision filtering.
+- `ios/TonyV1/TonyV1/Services/DemoDataFactory.swift` - Added demo raw text tracking so regeneration can avoid duplicate seeded items.
+- `ios/TonyV1/TonyV1/Views/ContentView.swift` - Added developer-safe local notices, non-duplicating demo regeneration, and shared model helper usage.
+- `docs/STATUS.md` - Updated to `V1_OFFLINE_MVP_HARDENED`.
+- `docs/NEXT_ACTION.md` - Updated to local macOS/Xcode QA.
+- `docs/V1_MOCK_MVP_QA.md` - Added manual QA steps and hardening evidence.
+
+### Not Included
+- No API keys requested or required.
+- No `.env.local` created.
+- No network provider, backend, login, cloud sync, LINE interception, VIP Filter, push notifications, Share Extension, Image OCR, or Calendar integration.
+
+---
+
 ## [v1-offline-product-complete] - June 28, 2026 - ChatGPT (iOS Engineer)
 
 ### Changed

@@ -3,12 +3,34 @@ import Foundation
 struct MockProvider: AIProvider {
     let name = "Mock"
 
+    private enum Domain {
+        static let money = "money"
+        static let farm = "farm"
+        static let export = "export"
+        static let health = "health"
+        static let ai = "ai"
+        static let vigo4u = "vigo4u"
+        static let personal = "personal"
+    }
+
+    private enum Urgency {
+        static let high = "high"
+        static let medium = "medium"
+        static let low = "low"
+    }
+
+    private enum ActionState {
+        static let needsDecision = "needsDecision"
+        static let needsAction = "needsAction"
+        static let captured = "captured"
+    }
+
     func classify(rawText: String) async throws -> String {
         let normalized = rawText.lowercased()
         let domain = inferDomain(from: normalized)
         let urgency = inferUrgency(from: normalized)
         let actionState = inferActionState(from: normalized, urgency: urgency)
-        let requiresDecision = actionState == "needsDecision" || urgency == "high"
+        let requiresDecision = actionState == ActionState.needsDecision || urgency == Urgency.high
 
         let response = AIClassification(
             summary: summarize(rawText),
@@ -27,55 +49,55 @@ struct MockProvider: AIProvider {
     }
 
     private func inferDomain(from text: String) -> String {
-        if containsAny(["invoice", "payment", "money", "cash", "budget", "thb", "baht", "transfer"], in: text) {
-            return "money"
-        }
-
         if containsAny(["farm", "fertilizer", "crop", "homestay"], in: text) {
-            return "farm"
-        }
-
-        if containsAny(["export", "shipment", "quote", "customs", "buyer", "chen"], in: text) {
-            return "export"
-        }
-
-        if containsAny(["health", "doctor", "run", "fasting", "sleep", "exercise"], in: text) {
-            return "health"
-        }
-
-        if containsAny(["project", "build", "ship", "release", "app", "ai"], in: text) {
-            return "ai"
+            return Domain.farm
         }
 
         if containsAny(["vigo", "vehicle", "car", "dealer"], in: text) {
-            return "vigo4u"
+            return Domain.vigo4u
         }
 
-        return "personal"
+        if containsAny(["export", "shipment", "quote", "customs", "buyer", "chen"], in: text) {
+            return Domain.export
+        }
+
+        if containsAny(["health", "doctor", "run", "fasting", "sleep", "exercise"], in: text) {
+            return Domain.health
+        }
+
+        if containsAny(["project", "build", "ship", "release", "app", "ai"], in: text) {
+            return Domain.ai
+        }
+
+        if containsAny(["invoice", "payment", "money", "cash", "budget", "thb", "baht", "transfer"], in: text) {
+            return Domain.money
+        }
+
+        return Domain.personal
     }
 
     private func inferUrgency(from text: String) -> String {
         if containsAny(["urgent", "asap", "today", "now", "deadline"], in: text) {
-            return "high"
+            return Urgency.high
         }
 
         if containsAny(["tomorrow", "this week"], in: text) {
-            return "medium"
+            return Urgency.medium
         }
 
-        return "low"
+        return Urgency.low
     }
 
     private func inferActionState(from text: String, urgency: String) -> String {
-        if urgency == "high" {
-            return "needsDecision"
+        if urgency == Urgency.high || containsAny(["approve", "decide", "accept", "decline"], in: text) {
+            return ActionState.needsDecision
         }
 
-        if containsAny(["approve", "decide", "reply", "call", "send", "transfer"], in: text) {
-            return "needsAction"
+        if containsAny(["reply", "call", "send", "transfer", "review", "schedule"], in: text) {
+            return ActionState.needsAction
         }
 
-        return "captured"
+        return ActionState.captured
     }
 
     private func summarize(_ rawText: String) -> String {

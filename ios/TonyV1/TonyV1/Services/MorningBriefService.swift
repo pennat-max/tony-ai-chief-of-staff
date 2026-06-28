@@ -4,13 +4,16 @@ struct MorningBrief {
     let topDecisions: [InboxItem]
     let domainSummaries: [(domain: String, count: Int)]
     let recommendedFirstAction: String
+    let activeCount: Int
+    let laterCount: Int
 }
 
 struct MorningBriefService {
     func generate(from items: [InboxItem]) -> MorningBrief {
-        let activeItems = items.filter { !$0.isArchived && $0.actionState != "done" }
+        let activeItems = items.filter { $0.isActive }
+        let laterItems = activeItems.filter { $0.actionState == InboxItem.actionLater }
         let decisions = activeItems
-            .filter { $0.requiresDecision || $0.urgency == "high" }
+            .filter { $0.isDecisionCandidate }
             .sorted { lhs, rhs in
                 if lhs.urgency == rhs.urgency {
                     return lhs.createdAt > rhs.createdAt
@@ -33,15 +36,17 @@ struct MorningBriefService {
             }
 
         let firstAction = decisions.first.map { item in
-            item.summary.isEmpty ? item.rawText : item.summary
+            item.displaySummary
         } ?? activeItems.first.map { item in
-            item.summary.isEmpty ? item.rawText : item.summary
+            item.displaySummary
         } ?? "Capture first item"
 
         return MorningBrief(
             topDecisions: Array(decisions),
             domainSummaries: summaries,
-            recommendedFirstAction: firstAction
+            recommendedFirstAction: firstAction,
+            activeCount: activeItems.count,
+            laterCount: laterItems.count
         )
     }
 

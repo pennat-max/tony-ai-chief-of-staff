@@ -7,6 +7,7 @@ struct ContentView: View {
 
     @StateObject private var speechRecognizer = SpeechRecognizer()
     @State private var rawText = ""
+    @State private var developerNotice: String?
 
     private let classificationService = AIClassificationService()
     private let morningBriefService = MorningBriefService()
@@ -16,15 +17,11 @@ struct ContentView: View {
     }
 
     private var activeItems: [InboxItem] {
-        items.filter { !$0.isArchived }
+        items.filter { $0.isActive }
     }
 
     private var decisionItems: [InboxItem] {
-        activeItems.filter {
-            ($0.requiresDecision || $0.urgency == "high")
-                && $0.actionState != "done"
-                && $0.actionState != "later"
-        }
+        activeItems.filter { $0.isDecisionCandidate }
     }
 
     private var morningBrief: MorningBrief {
@@ -127,6 +124,12 @@ struct ContentView: View {
                     .font(.footnote)
                     .foregroundStyle(.red.opacity(0.9))
             }
+
+            if let developerNotice = developerNotice {
+                Text(developerNotice)
+                    .font(.footnote)
+                    .foregroundStyle(.white.opacity(0.56))
+            }
         }
     }
 
@@ -146,10 +149,18 @@ struct ContentView: View {
 
     private func seedDemoData() {
         Task { @MainActor in
+            let existingDemoItems = items.filter { DemoDataFactory.isDemoItem($0) }
+            for item in existingDemoItems {
+                modelContext.delete(item)
+            }
+
             for item in DemoDataFactory.makeInboxItems() {
                 modelContext.insert(item)
                 await classify(item)
             }
+
+            developerNotice = "Demo data regenerated locally."
+            try? modelContext.save()
         }
     }
 
@@ -166,29 +177,26 @@ struct ContentView: View {
             item.summary = item.rawText
             item.domain = "unclassified"
             item.urgency = "low"
-            item.actionState = "captured"
+            item.actionState = InboxItem.actionCaptured
             item.requiresDecision = false
+            developerNotice = "Mock classification fallback used."
         }
 
         try? modelContext.save()
     }
 
     private func markDone(_ item: InboxItem) {
-        item.actionState = "done"
-        item.requiresDecision = false
+        item.markDone()
         try? modelContext.save()
     }
 
     private func archive(_ item: InboxItem) {
-        item.isArchived = true
-        item.requiresDecision = false
-        item.actionState = "archived"
+        item.archive()
         try? modelContext.save()
     }
 
     private func keepLater(_ item: InboxItem) {
-        item.actionState = "later"
-        item.requiresDecision = false
+        item.keepForLater()
         try? modelContext.save()
     }
 }
@@ -199,6 +207,11 @@ private struct MorningBriefView: View {
     var body: some View {
         SectionBlock(title: "Morning Brief") {
             VStack(alignment: .leading, spacing: 14) {
+                Text("\(brief.activeCount) active items / \(brief.laterCount) kept for later")
+                    .font(.caption)
+                    .textCase(.uppercase)
+                    .foregroundStyle(.white.opacity(0.48))
+
                 Text(brief.recommendedFirstAction)
                     .font(.system(size: 22, weight: .regular, design: .serif))
                     .lineLimit(4)
@@ -211,7 +224,7 @@ private struct MorningBriefView: View {
                             .foregroundStyle(.white.opacity(0.48))
 
                         ForEach(brief.topDecisions) { item in
-                            Text(item.summary.isEmpty ? item.rawText : item.summary)
+                            Text(item.displaySummary)
                                 .font(.system(size: 16, weight: .regular, design: .default))
                                 .foregroundStyle(.white.opacity(0.78))
                                 .lineLimit(2)
@@ -291,7 +304,7 @@ private struct InboxItemRow: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text(item.summary.isEmpty ? item.rawText : item.summary)
+            Text(item.displaySummary)
                 .font(.system(size: 19, weight: .regular, design: .serif))
                 .foregroundStyle(.white)
                 .lineLimit(4)

@@ -3,6 +3,13 @@ import SwiftData
 
 @Model
 final class InboxItem {
+    static let actionCaptured = "captured"
+    static let actionNeedsAction = "needsAction"
+    static let actionNeedsDecision = "needsDecision"
+    static let actionDone = "done"
+    static let actionArchived = "archived"
+    static let actionLater = "later"
+
     var rawText: String
     var summary: String = ""
     var domain: String
@@ -30,5 +37,35 @@ final class InboxItem {
         self.createdAt = createdAt
         self.isArchived = isArchived
         self.requiresDecision = requiresDecision
+    }
+
+    var displaySummary: String {
+        summary.isEmpty ? rawText : summary
+    }
+
+    var isActive: Bool {
+        !isArchived && actionState != Self.actionDone
+    }
+
+    var isDecisionCandidate: Bool {
+        isActive
+            && actionState != Self.actionLater
+            && (requiresDecision || urgency == "high")
+    }
+
+    func markDone() {
+        actionState = Self.actionDone
+        requiresDecision = false
+    }
+
+    func archive() {
+        isArchived = true
+        actionState = Self.actionArchived
+        requiresDecision = false
+    }
+
+    func keepForLater() {
+        actionState = Self.actionLater
+        requiresDecision = false
     }
 }
