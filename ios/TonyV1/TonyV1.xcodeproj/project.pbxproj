@@ -15,9 +15,6 @@
 		4D00001E2C28000100A00001 /* AIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D00001F2C28000100A00001 /* AIProvider.swift */; };
 		4D0000202C28000100A00001 /* AIClassificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0000212C28000100A00001 /* AIClassificationService.swift */; };
 		4D0000222C28000100A00001 /* MockProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0000232C28000100A00001 /* MockProvider.swift */; };
-		4D0000242C28000100A00001 /* OpenAIProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0000252C28000100A00001 /* OpenAIProvider.swift */; };
-		4D0000262C28000100A00001 /* ClaudeProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0000272C28000100A00001 /* ClaudeProvider.swift */; };
-		4D0000282C28000100A00001 /* GeminiProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D0000292C28000100A00001 /* GeminiProvider.swift */; };
 		4D00002A2C28000100A00001 /* MorningBriefService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D00002B2C28000100A00001 /* MorningBriefService.swift */; };
 		4D00002C2C28000100A00001 /* DemoDataFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4D00002D2C28000100A00001 /* DemoDataFactory.swift */; };
 /* End PBXBuildFile section */
@@ -33,9 +30,6 @@
 		4D00001F2C28000100A00001 /* AIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIProvider.swift; sourceTree = "<group>"; };
 		4D0000212C28000100A00001 /* AIClassificationService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AIClassificationService.swift; sourceTree = "<group>"; };
 		4D0000232C28000100A00001 /* MockProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockProvider.swift; sourceTree = "<group>"; };
-		4D0000252C28000100A00001 /* OpenAIProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OpenAIProvider.swift; sourceTree = "<group>"; };
-		4D0000272C28000100A00001 /* ClaudeProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ClaudeProvider.swift; sourceTree = "<group>"; };
-		4D0000292C28000100A00001 /* GeminiProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeminiProvider.swift; sourceTree = "<group>"; };
 		4D00002B2C28000100A00001 /* MorningBriefService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MorningBriefService.swift; sourceTree = "<group>"; };
 		4D00002D2C28000100A00001 /* DemoDataFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoDataFactory.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -94,9 +88,6 @@
 				4D00001F2C28000100A00001 /* AIProvider.swift */,
 				4D0000212C28000100A00001 /* AIClassificationService.swift */,
 				4D0000232C28000100A00001 /* MockProvider.swift */,
-				4D0000252C28000100A00001 /* OpenAIProvider.swift */,
-				4D0000272C28000100A00001 /* ClaudeProvider.swift */,
-				4D0000292C28000100A00001 /* GeminiProvider.swift */,
 				4D00002B2C28000100A00001 /* MorningBriefService.swift */,
 				4D00002D2C28000100A00001 /* DemoDataFactory.swift */,
 				4D0000082C28000100A00001 /* SpeechRecognizer.swift */,
@@ -188,9 +179,6 @@
 				4D00001E2C28000100A00001 /* AIProvider.swift in Sources */,
 				4D0000202C28000100A00001 /* AIClassificationService.swift in Sources */,
 				4D0000222C28000100A00001 /* MockProvider.swift in Sources */,
-				4D0000242C28000100A00001 /* OpenAIProvider.swift in Sources */,
-				4D0000262C28000100A00001 /* ClaudeProvider.swift in Sources */,
-				4D0000282C28000100A00001 /* GeminiProvider.swift in Sources */,
 				4D00002A2C28000100A00001 /* MorningBriefService.swift in Sources */,
 				4D00002C2C28000100A00001 /* DemoDataFactory.swift in Sources */,
 			);

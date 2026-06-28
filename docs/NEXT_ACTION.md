@@ -4,26 +4,20 @@
 
 ---
 
-## Real AI Provider Decision
+## Stop - Tony V1 Offline Product Complete
 
-**What:** Decide which real provider transport should replace the mock classification path first.
+**What:** Do not continue building unless a new mission explicitly reopens scope.
 
-**Context:** Tony V1 Mock MVP is complete. The app runs locally with SwiftData and `MockProvider`, includes an AI Inbox, Decision Queue, Morning Brief, demo data, and local actions. No API keys are required today.
-
-**Decision Needed:**
-Choose exactly one provider to activate first:
-
-- OpenAI
-- Claude
-- Gemini
+**Context:** Tony V1 is complete as an offline local-first SwiftUI product. It uses SwiftData, AI Inbox capture, `MockProvider`, Decision Queue, Morning Brief, local item actions, and demo data. It requires no API keys and no network providers.
 
 **Do NOT:**
-- Do not add credentials before the provider decision is explicit.
-- Do not build more product surface area before real-provider choice.
+- Do not request API keys.
+- Do not create `.env.local`.
+- Do not add OpenAI, Claude, Gemini, or any other network provider.
 - Do not build Share Extension yet.
 - Do not attempt LINE notification interception.
 - Do not build VIP Filter.
 - Do not add push notifications or background automation.
 
-**When the provider is chosen:**
-Implement that provider behind the existing `AIProvider` protocol while keeping `MockProvider` available for local testing.
+**If work resumes later:**
+Start from a new explicit mission. The only intended replaceable boundary is `AIProvider`.

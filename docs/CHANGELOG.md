@@ -4,6 +4,27 @@ All completed work is recorded here in reverse chronological order. Every AI age
 
 ---
 
+## [v1-offline-product-complete] - June 28, 2026 - ChatGPT (iOS Engineer)
+
+### Changed
+- `ios/TonyV1/TonyV1.xcodeproj` - Removed real-provider shell files from the app target.
+- `ios/TonyV1/TonyV1/Services/AIProvider.swift` - Kept the replaceable provider protocol while removing unused real-provider configuration error surface.
+- `docs/STATUS.md` - Updated to `V1_OFFLINE_PRODUCT_COMPLETE`.
+- `docs/NEXT_ACTION.md` - Updated to stop work until a new explicit mission reopens scope.
+- `docs/V1_MOCK_MVP_QA.md` - Updated to confirm the offline product state and removal of network provider shells.
+
+### Removed
+- `ios/TonyV1/TonyV1/Services/OpenAIProvider.swift`
+- `ios/TonyV1/TonyV1/Services/ClaudeProvider.swift`
+- `ios/TonyV1/TonyV1/Services/GeminiProvider.swift`
+
+### Not Included
+- No API keys requested or required.
+- No `.env.local` created.
+- No OpenAI, Claude, Gemini, or other network provider implementation.
+
+---
+
 ## [v1-mock-mvp-complete] - June 28, 2026 - ChatGPT (iOS Engineer)
 
 ### Added

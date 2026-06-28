@@ -1,7 +1,7 @@
 # Tony V1 Mock MVP QA
 
 **Date:** June 28, 2026
-**Status:** Ready for local Xcode validation
+**Status:** Offline product complete; ready for local Xcode validation
 
 ---
 
@@ -9,6 +9,7 @@
 
 - SwiftUI app remains in `ios/TonyV1/`.
 - `MockProvider` is the default provider.
+- No real provider shell is included in the app target.
 - No API key is required.
 - No real OpenAI, Claude, or Gemini network transport is active.
 - SwiftData remains the local store.
@@ -31,6 +32,7 @@
 | User can keep later | Complete | `keepLater(_:)` sets `actionState = "later"`. |
 | Demo data can be generated | Complete | Header demo button inserts `DemoDataFactory.makeInboxItems()`. |
 | App requires no real provider credential | Complete | No API key, `URLSession`, or real provider transport is used. |
+| AI transport remains replaceable | Complete | `AIProvider` protocol remains and `AIClassificationService` accepts any conforming provider. |
 
 ---
 
@@ -47,6 +49,9 @@ This Windows environment cannot run Xcode or `xcodebuild`. The implementation wa
 - Real OpenAI provider
 - Real Claude provider
 - Real Gemini provider
+- Any network provider transport
+- API key setup
+- `.env.local`
 - Backend
 - Login
 - Cloud sync

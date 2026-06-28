@@ -1,21 +1,20 @@
 # Tony Project Status
 
-**Status: V1_MOCK_MVP_COMPLETE**
+**Status: V1_OFFLINE_PRODUCT_COMPLETE**
 
 **Last Updated:** June 28, 2026
 **Last Agent:** ChatGPT - iOS Engineer
-**Current Phase:** Tony V1 local mock MVP complete
+**Current Phase:** Tony V1 offline product complete
 
 ---
 
 ## Decision
 
-Tony V1 now has a usable local-first mock MVP flow.
+Tony V1 is complete as an offline, local-first iPhone product.
 
-The app still uses `MockProvider` only. It does not require API keys and does not call OpenAI, Claude, Gemini, a backend, or any cloud service.
+The app uses `MockProvider` only. It requires no API keys, creates no `.env.local`, and has no network provider implementation. The AI transport remains replaceable through the existing `AIProvider` protocol.
 
 See:
-- `docs/NEXT_ACTION.md`
 - `docs/V1_MOCK_MVP_QA.md`
 - `ios/TonyV1/`
 
@@ -24,38 +23,27 @@ See:
 ## What is Done
 
 - Kept the existing `ios/TonyV1/` SwiftUI app.
-- Kept `MockProvider` as the default AI provider.
-- Expanded `InboxItem` with:
-  - `rawText`
-  - `summary`
-  - `domain`
-  - `urgency`
-  - `actionState`
-  - `createdAt`
-  - `isArchived`
-  - `requiresDecision`
-- Expanded strict mock JSON classification to include:
-  - `summary`
-  - `domain`
-  - `urgency`
-  - `actionState`
-  - `requiresDecision`
-- Built Decision Queue for important items.
-- Added Mark Done, Archive, and Keep for Later actions.
-- Built local deterministic Morning Brief with:
-  - top 3 decisions
-  - grouped domain summary
-  - one recommended first action
-- Added demo data generation for local testing.
-- Preserved the black Calm UI direction with large iPhone-first typography.
+- Kept `MockProvider` as the only active AI provider.
+- Kept `AIProvider` as the replaceable transport boundary.
+- Removed unused real-provider shells from the app target.
+- Kept local SwiftData storage for all captured items.
+- Kept AI Inbox capture via typing and speech dictation.
+- Kept deterministic local mock classification.
+- Kept Decision Queue with Mark Done, Archive, and Keep for Later.
+- Kept deterministic local Morning Brief.
+- Kept demo data generation for local testing.
+- Preserved the black Calm UI direction with iPhone-first typography.
 
 ---
 
-## What is NOT Built
+## Explicitly Not Built
 
-- Real OpenAI provider
-- Real Claude provider
-- Real Gemini provider
+- OpenAI integration
+- Claude integration
+- Gemini integration
+- API key setup
+- `.env.local`
+- Network provider transport
 - Backend
 - Login
 - Cloud sync
@@ -70,17 +58,12 @@ See:
 
 ## Next Step
 
-Real AI Provider Decision.
+Stop. Product is complete for the current Tony V1 offline scope.
 
-Read:
-- `docs/NEXT_ACTION.md`
-- `ios/TonyV1/TonyV1/Services/AIProvider.swift`
-- `ios/TonyV1/TonyV1/Services/MockProvider.swift`
-
-Then decide which real provider should be activated first. Do not add credentials or network calls until that provider decision is explicit.
+Only resume engineering if a new mission explicitly reopens scope.
 
 ---
 
 ## Confidence Level
 
-High. The local mock MVP flow is complete and can be validated on macOS/Xcode without any real provider credentials.
+High. The app is fully usable offline with local storage, mock classification, Decision Queue, Morning Brief, and no provider credentials.

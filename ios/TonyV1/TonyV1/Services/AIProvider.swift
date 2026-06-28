@@ -9,7 +9,6 @@ struct AIClassification: Codable {
 }
 
 enum AIProviderError: Error {
-    case providerNotConfigured(String)
     case invalidResponse
 }
 
