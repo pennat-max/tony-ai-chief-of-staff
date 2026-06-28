@@ -1,37 +1,29 @@
 # CEO Summary: Tony V1 (The 30-Day MVP)
 
 **Date:** June 28, 2026
-**Prepared by:** Manus AI — Product Owner
-**Status:** Scoped and Ready for iOS Engineering.
+**Prepared by:** Manus AI — Technical Architect
+**Status:** Feasibility Proven. Ready for CTO Review.
 
 ---
 
-## The Pivot: From Vision to Reality
+## The Breakthrough
 
-We have paused the grand vision of the "AI Chief of Staff." Building a complex system with databases, multi-domain ontologies, and API write-access is a multi-month endeavor with high failure risk. 
+The biggest risk to Tony V1 was Apple's security sandbox: *How do we read LINE messages without hacking the phone or violating privacy?*
 
-Instead, we are building exactly one thing, for one user, in 30 days.
+We have found the solution. In the newly released **iOS 27**, Apple added a feature to the Shortcuts app that allows users to trigger automations based on incoming notifications. 
 
-## The 30-Day Product: The LINE VIP Filter
+**What this means for Tony:**
+1. พี่คอม sets up a rule on his iPhone exactly once: *"When LINE sends a notification, pass the sender name and message to Tony."*
+2. This runs **silently in the background**. Tony does not need to open.
+3. Tony collects these messages locally on the device, filters out the noise, and prepares the Morning Triage screen.
 
-พี่คอม's biggest pain point is opening LINE in the morning and facing 100+ unread messages. 
+## The Technical Architecture
 
-**Tony V1 is a standalone iOS app that does only this:**
-1. It intercepts incoming LINE notifications overnight.
-2. It checks the sender against a hardcoded list of 10 VIPs.
-3. In the morning, it displays a pure black screen showing *only* the VIP messages, plus a 2-sentence AI summary of the rest.
-4. It provides a microphone button to dictate a reply, which Tony translates to professional Thai and copies to the clipboard.
-5. At midnight, it deletes everything and starts over.
+We are building a **Native iOS App (SwiftUI)**. 
+We cannot use a web app (PWA) because web apps cannot hook into the iOS Shortcuts system. 
 
-No databases. No accounts. No settings menus. No complex AI reasoning. Just peace of mind every morning.
+The app will have no backend server. All messages stay on พี่คอม's iPhone. When Tony needs to summarize the noise, it will make a direct API call to an LLM (like Claude 3 Haiku) and immediately discard the data.
 
-## The Technical Reality
+## Next Steps for Engineering
 
-To hit the 30-day deadline, we are making brutal engineering trade-offs:
-*   **No backend:** All logic runs locally on the iPhone, making direct API calls to OpenAI/Anthropic.
-*   **Read-Only:** Tony cannot send messages. It only copies text to the clipboard for พี่คอม to paste into LINE. This guarantees zero catastrophic errors in V1.
-*   **The iOS Sandbox Hack:** Because Apple prevents apps from reading other apps' notifications, the engineering team's first task is to build an iOS Shortcut Automation that silently passes LINE messages to the Tony app.
-
-## Next Steps
-
-We need an iOS engineer immediately. Week 1 is entirely dedicated to proving we can intercept LINE messages via iOS Shortcuts and pass them to a blank SwiftUI app. If we win Week 1, we ship in 30 days.
+We are ready to write code. The first task (The "Tracer Bullet") is to build a blank iOS app that proves it can silently receive a message from the Shortcuts app and save it. Once that is proven, the rest of the 30-day MVP is standard UI and API work.
