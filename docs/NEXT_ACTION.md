@@ -4,30 +4,81 @@
 
 ---
 
-## Activate the First Real AI Provider Transport
+## Finish Tony V1 Mock MVP in One Pass
 
-**What:** Replace the default mock classification path with one approved real provider behind the existing `AIProvider` protocol.
+**What:** Complete the local-first Tony V1 mock product flow using the existing SwiftUI app and `MockProvider`.
 
-**Context:** The app already has provider architecture and uses `MockProvider` by default. It does not require API keys today. The next phase should choose exactly one real provider transport and keep the same strict JSON contract.
+**Context:** Phase 1 is complete and AI Provider abstraction is complete. The app can run without real provider credentials. Do not stop after one small function. Finish the usable mock MVP flow.
 
-**Steps:**
-1. Open `ios/TonyV1/TonyV1.xcodeproj`.
-2. Choose the first real provider to activate: OpenAI, Claude, or Gemini.
-3. Confirm the approved credential path before adding any real API key usage.
-4. Implement the selected provider behind `AIProvider`.
-5. Keep `MockProvider` available for local development and previews.
-6. Preserve the strict JSON response contract:
+## Build Only These Items
+
+1. Keep the existing `ios/TonyV1/` SwiftUI app.
+2. Keep `MockProvider` as the default AI provider.
+3. Ensure `InboxItem` supports:
+   - `rawText`
+   - `summary`
    - `domain`
    - `urgency`
    - `actionState`
-7. Persist parsed values to the existing `InboxItem` records.
+   - `createdAt`
+   - `isArchived`
+   - `requiresDecision`
+4. Build Decision Queue:
+   - shows important items
+   - supports Mark Done
+   - supports Archive
+   - supports Keep for Later
+5. Build Morning Brief:
+   - local deterministic summary from stored items
+   - top 3 decisions
+   - grouped summary by domain
+   - one recommended first action
+6. Add optional demo data helper for local testing.
+7. Keep Calm UI:
+   - black background
+   - white text
+   - large readable typography
+   - simple iPhone-first layout
 
-**Do NOT:**
-- Do not build the Morning Brief yet.
-- Do not build the Share Extension yet.
-- Do not attempt LINE notification interception.
-- Do not build the VIP Filter.
-- Do not add push notifications or background automation.
+## Do NOT Build
 
-**When complete:**
-Update `docs/STATUS.md`, `docs/NEXT_ACTION.md`, and `docs/CHANGELOG.md`.
+- Real OpenAI provider
+- Real Claude provider
+- Real Gemini provider
+- Backend
+- Login
+- Cloud sync
+- LINE notification interception
+- VIP Filter
+- Push notifications
+- Share Extension
+- Image OCR
+- Calendar integration
+
+## Acceptance Criteria
+
+The mission is complete when:
+
+1. User can type or dictate an item.
+2. Item saves to SwiftData.
+3. Item is classified by `MockProvider`.
+4. Inbox shows classification.
+5. Decision Queue shows required decisions.
+6. Morning Brief generates from local items.
+7. User can mark done / archive / keep later.
+8. Demo data can be generated.
+9. App requires no real provider credential.
+
+## When Complete
+
+Update:
+
+- `docs/STATUS.md` to `V1_MOCK_MVP_COMPLETE`
+- `docs/NEXT_ACTION.md` to `Real AI Provider Decision`
+- `docs/CHANGELOG.md`
+
+Add:
+
+- `docs/V1_MOCK_MVP_QA.md`
+
+Do not hand back until the local mock MVP flow is complete.
