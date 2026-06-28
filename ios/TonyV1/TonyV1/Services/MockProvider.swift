@@ -8,11 +8,14 @@ struct MockProvider: AIProvider {
         let domain = inferDomain(from: normalized)
         let urgency = inferUrgency(from: normalized)
         let actionState = inferActionState(from: normalized, urgency: urgency)
+        let requiresDecision = actionState == "needsDecision" || urgency == "high"
 
         let response = AIClassification(
+            summary: summarize(rawText),
             domain: domain,
             urgency: urgency,
-            actionState: actionState
+            actionState: actionState,
+            requiresDecision: requiresDecision
         )
 
         let data = try JSONEncoder().encode(response)
@@ -73,6 +76,14 @@ struct MockProvider: AIProvider {
         }
 
         return "captured"
+    }
+
+    private func summarize(_ rawText: String) -> String {
+        let trimmed = rawText.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard trimmed.count > 92 else { return trimmed }
+
+        let endIndex = trimmed.index(trimmed.startIndex, offsetBy: 92)
+        return String(trimmed[..<endIndex]) + "..."
     }
 
     private func containsAny(_ needles: [String], in text: String) -> Bool {

@@ -1,9 +1,11 @@
 import Foundation
 
 struct AIClassification: Codable {
+    let summary: String
     let domain: String
     let urgency: String
     let actionState: String
+    let requiresDecision: Bool
 }
 
 enum AIProviderError: Error {

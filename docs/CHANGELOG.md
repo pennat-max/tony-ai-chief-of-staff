@@ -4,6 +4,28 @@ All completed work is recorded here in reverse chronological order. Every AI age
 
 ---
 
+## [v1-mock-mvp-complete] - June 28, 2026 - ChatGPT (iOS Engineer)
+
+### Added
+- `ios/TonyV1/TonyV1/Services/MorningBriefService.swift` - Deterministic local Morning Brief generation from SwiftData items.
+- `ios/TonyV1/TonyV1/Services/DemoDataFactory.swift` - Local demo data helper for testing the mock MVP flow.
+- `docs/V1_MOCK_MVP_QA.md` - QA checklist for the local mock MVP acceptance criteria.
+
+### Changed
+- `ios/TonyV1/TonyV1/Models/InboxItem.swift` - Added `summary`, `isArchived`, and `requiresDecision`.
+- `ios/TonyV1/TonyV1/Services/AIProvider.swift` - Expanded strict JSON contract to include `summary` and `requiresDecision`.
+- `ios/TonyV1/TonyV1/Services/MockProvider.swift` - Added deterministic summary and decision classification values.
+- `ios/TonyV1/TonyV1/Views/ContentView.swift` - Added Morning Brief, Decision Queue, Mark Done, Archive, Keep for Later, and demo data generation while preserving the Calm UI shell.
+- `docs/STATUS.md` - Updated to `V1_MOCK_MVP_COMPLETE`.
+- `docs/NEXT_ACTION.md` - Updated to `Real AI Provider Decision`.
+
+### Not Included
+- No API keys requested or required.
+- No real OpenAI, Claude, or Gemini integration.
+- No backend, login, cloud sync, LINE interception, VIP Filter, push notifications, Share Extension, Image OCR, or Calendar integration.
+
+---
+
 ## [v1-ai-provider-abstraction] - June 28, 2026 - ChatGPT (iOS Engineer)
 
 ### Added

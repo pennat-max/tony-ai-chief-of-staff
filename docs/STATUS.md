@@ -1,75 +1,86 @@
 # Tony Project Status
 
-**Status: V1_AI_PROVIDER_ABSTRACTION_COMPLETE**
+**Status: V1_MOCK_MVP_COMPLETE**
 
 **Last Updated:** June 28, 2026
 **Last Agent:** ChatGPT - iOS Engineer
-**Current Phase:** Revised Tony V1 mock LLM provider architecture complete
+**Current Phase:** Tony V1 local mock MVP complete
 
 ---
 
 ## Decision
 
-Tony V1 now has an AI Provider abstraction for inbox classification without requiring API keys.
+Tony V1 now has a usable local-first mock MVP flow.
 
-This phase intentionally does not integrate OpenAI, Claude, or Gemini network calls. `MockProvider` is the default provider and returns strict JSON that is decoded and persisted into each existing SwiftData `InboxItem`.
+The app still uses `MockProvider` only. It does not require API keys and does not call OpenAI, Claude, Gemini, a backend, or any cloud service.
 
 See:
-- `docs/V1_REVISED_MVP.md`
+- `docs/NEXT_ACTION.md`
+- `docs/V1_MOCK_MVP_QA.md`
 - `ios/TonyV1/`
 
 ---
 
 ## What is Done
 
-- Added `AIProvider` protocol.
-- Added `AIClassificationService`.
-- Added provider shells:
-  - `OpenAIProvider`
-  - `ClaudeProvider`
-  - `GeminiProvider`
-  - `MockProvider`
-- Set `MockProvider` as the default provider.
-- Added strict JSON classification contract for:
+- Kept the existing `ios/TonyV1/` SwiftUI app.
+- Kept `MockProvider` as the default AI provider.
+- Expanded `InboxItem` with:
+  - `rawText`
+  - `summary`
   - `domain`
   - `urgency`
   - `actionState`
-- Connected the existing capture flow to classify `InboxItem.rawText` after local SwiftData insertion.
-- Persisted classification results back to the same `InboxItem`.
-- Kept all existing SwiftData captures intact.
-- Surfaced classification values in the existing list view.
+  - `createdAt`
+  - `isArchived`
+  - `requiresDecision`
+- Expanded strict mock JSON classification to include:
+  - `summary`
+  - `domain`
+  - `urgency`
+  - `actionState`
+  - `requiresDecision`
+- Built Decision Queue for important items.
+- Added Mark Done, Archive, and Keep for Later actions.
+- Built local deterministic Morning Brief with:
+  - top 3 decisions
+  - grouped domain summary
+  - one recommended first action
+- Added demo data generation for local testing.
+- Preserved the black Calm UI direction with large iPhone-first typography.
 
 ---
 
-## What is NOT Built Yet
+## What is NOT Built
 
-Do not treat any of these as complete:
-
-- Real OpenAI API calls
-- Real Claude API calls
-- Real Gemini API calls
-- Morning Brief
-- Share Extension
+- Real OpenAI provider
+- Real Claude provider
+- Real Gemini provider
+- Backend
+- Login
+- Cloud sync
 - LINE notification interception
 - VIP Filter
 - Push notifications
-- Background automation
+- Share Extension
+- Image OCR
+- Calendar integration
 
 ---
 
 ## Next Step
 
-Choose and activate the first real AI provider transport.
+Real AI Provider Decision.
 
 Read:
 - `docs/NEXT_ACTION.md`
 - `ios/TonyV1/TonyV1/Services/AIProvider.swift`
-- `ios/TonyV1/TonyV1/Services/AIClassificationService.swift`
+- `ios/TonyV1/TonyV1/Services/MockProvider.swift`
 
-Then implement one real provider behind the existing `AIProvider` protocol only after the credential and provider decision is approved.
+Then decide which real provider should be activated first. Do not add credentials or network calls until that provider decision is explicit.
 
 ---
 
 ## Confidence Level
 
-High. The app can classify new captures with mock JSON now, runs without API keys, and has a clean provider boundary for a future real LLM transport.
+High. The local mock MVP flow is complete and can be validated on macOS/Xcode without any real provider credentials.
