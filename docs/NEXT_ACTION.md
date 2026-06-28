@@ -2,6 +2,10 @@
 
 **Exactly one action for the next AI agent or engineer.**
 
+> **Reality Validation is complete.** See `docs/REALITY_VALIDATION.md` for the honest integration status of all 11 platforms (LINE, WhatsApp, Gmail, Calendar, Drive, Photos, Health, Banking, Notifications, Voice, Shortcuts). Read it before touching any code.
+
+> **Do NOT start Week 2 (VIP Filter), add LLM, or build any new features until the Physical iPhone Test passes.**
+
 ---
 
 ## Run the Physical iPhone Test
