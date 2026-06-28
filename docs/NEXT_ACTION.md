@@ -1,40 +1,64 @@
 # Next Action
 
-**Exactly one action for the next AI agent or engineer.**
-
-> **Reality Validation is complete.** See `docs/REALITY_VALIDATION.md` for the honest integration status of all 11 platforms (LINE, WhatsApp, Gmail, Calendar, Drive, Photos, Health, Banking, Notifications, Voice, Shortcuts). Read it before touching any code.
-
-> **Do NOT start Week 2 (VIP Filter), add LLM, or build any new features until the Physical iPhone Test passes.**
+**Exactly one action for the next AI agent or product owner.**
 
 ---
 
-## Run the Physical iPhone Test
+## Create Revised Tony V1 MVP
 
-**Prerequisites:**
-- Mac with Xcode 16 or later
-- Apple Developer account (free account works for device testing)
-- Physical iPhone running iOS 27 beta
+The LINE auto-notification interception path is skipped for now.
 
-**Steps:**
-1. Open Xcode. Create a new iOS App project named `TonyTracerBullet`. See `ios/TonyTracerBullet/README_XCODE.md` for exact settings.
-2. Copy the 5 source files from `ios/TonyTracerBullet/TonyTracerBullet/` into the Xcode project.
-3. **Add App Group entitlement:** In Xcode → Target → Signing & Capabilities → + Capability → App Groups. Create a group named `group.com.tony.tracerbullet`. Update `IngestMessageIntent.swift` to use this shared container URL for the `ModelContainer`.
-4. Set Deployment Target to iOS 27.
-5. Build and run on the physical iPhone (⌘R).
-6. Open the app once to register the App Intent with iOS.
-7. Follow `ios/TonyTracerBullet/SHORTCUTS_SETUP.md` to configure the Shortcuts automation.
-8. Close the Tony app completely (swipe away in app switcher).
-9. Send a LINE message to the iPhone from another device.
-10. Open Tony. Check if the message appears in the list.
+Read first:
 
-**If the test passes:**
-- Document the device model, iOS version, and Xcode version in `docs/TRACER_BULLET_RESULT.md`.
-- Update `docs/STATUS.md` to `TRACER_BULLET_PASSED_ON_DEVICE`.
-- Add entry to `docs/CHANGELOG.md`.
-- Set `docs/NEXT_ACTION.md` to "Build VIP Filter (Week 2)".
+1. `docs/V1_PIVOT_DECISION.md`
+2. `docs/STATUS.md`
+3. `docs/REALITY_VALIDATION.md`
 
-**If the test fails:**
-- Document the exact failure (error message, console log, which step failed) in `docs/TRACER_BULLET_RESULT.md`.
-- Update `docs/STATUS.md` to `TRACER_BULLET_FAILED`.
-- Update `docs/BLOCKERS.md` with the specific technical issue.
-- Stop. Do not proceed to Week 2. Wait for Product Owner decision.
+## Mission
+
+Create a revised Tony V1 MVP that does not depend on iOS notification interception, iOS 27 beta, Xcode physical-device testing, or LINE auto-reading.
+
+Tony V1 should become:
+
+**Manual / Shortcut-first AI Inbox + Morning Brief**
+
+## Required Output
+
+Create:
+
+- `docs/V1_REVISED_MVP.md`
+
+Update:
+
+- `docs/CEO_SUMMARY.md`
+- `docs/STATUS.md`
+- `docs/CHANGELOG.md`
+- `docs/NEXT_ACTION.md`
+
+## Revised V1 must define
+
+1. One killer feature for the new V1.
+2. First five features only.
+3. What gets postponed.
+4. One-day user journey for พี่คอม.
+5. Required integrations.
+6. Explicitly excluded integrations.
+7. What can ship in 14–30 days.
+8. First screen on iPhone.
+9. Acceptance criteria.
+10. Next engineering step after CTO approval.
+
+## Rules
+
+Do not write production code.
+Do not design a full product.
+Do not return to LINE notification interception.
+Do not add complex integrations.
+
+Focus on the smallest useful Tony that พี่คอม can actually use on iPhone without waiting for hardware/beta OS validation.
+
+## When done
+
+Set `docs/STATUS.md` to:
+
+`READY_FOR_CTO_REVIEW_REVISED_V1`
