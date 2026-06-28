@@ -1,3 +1,4 @@
+Added REALITY_VALIDATION.md documenting platform integration constraints.
 # Changelog
 
 All completed work is recorded here in reverse chronological order. Every AI agent and engineer must add an entry when completing a task.
