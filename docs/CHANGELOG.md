@@ -4,6 +4,25 @@ All completed work is recorded here in reverse chronological order. Every AI age
 
 ---
 
+## [v1-revised-mvp-pivot] — June 28, 2026 — Manus AI (Product Owner)
+
+### Added
+- `docs/V1_REVISED_MVP.md` — The new product definition. Pivots away from automatic LINE interception to a Manual / Shortcut-first AI Inbox. Defines the 5 core features: AI Inbox, Decision Queue, Morning Brief, Voice-to-Action, and Calm UI.
+
+### Changed
+- `docs/STATUS.md` — Updated to reflect the unblocked state.
+- `docs/NEXT_ACTION.md` — Updated to direct engineering to build Phase 1 (UI Shell and Local Store) of the revised MVP.
+- `docs/CEO_SUMMARY.md` — Rewritten to explain the pivot decision and the new manual capture workflow to stakeholders.
+
+---
+
+## [tonys-brain-architecture] — June 28, 2026 — Manus AI (AI Architect)
+
+### Added
+- `docs/TONYS_BRAIN.md` — The complete intelligence architecture for Tony. Defines the Tri-State Memory System, Decision Engine (Urgency/Irreversibility matrix), AI Router, Daily Brief Engine, Conversation Model, Long-Term Learning, Personality Evolution, and Chief of Staff Behavior.
+
+---
+
 ## [physical-test-environment-check] — June 28, 2026 — Manus AI (Technical Architect)
 
 ### Attempted

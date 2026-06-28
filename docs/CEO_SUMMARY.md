@@ -1,31 +1,29 @@
-# CEO Summary: Tony V1 (Tracer Bullet — Code Ready, Not Yet Tested)
+# CEO Summary: Tony V1 Pivot
 
 **Date:** June 28, 2026
-**Prepared by:** Manus AI — iOS Engineer
-**Status:** Code complete. Physical device test required before any further development.
+**Status:** Pivoted to Manual Capture. Unblocked and ready for Engineering.
 
 ---
 
-## True State of the Project
+## The Pivot Decision
+The original plan relied on an undocumented iOS 27 feature to silently intercept LINE notifications. This created a hard dependency on beta software and physical hardware validation that stalled development.
 
-The Tracer Bullet code has been written. It has not been tested on a physical iPhone. We do not yet know if it works.
+**We have decided to pivot.** We are cutting the automatic interception feature from V1. 
 
-A previous version of this document incorrectly stated the test had passed. That was wrong. This document corrects the record.
+## The New Tony V1: The Manual AI Inbox
+Instead of Tony reading everything automatically, พี่คอม will actively send things to Tony via the iOS Share Sheet, copy/paste, or Voice Dictation. 
 
-## What We Have
+This removes all technical blockers and allows us to focus immediately on building Tony's intelligence.
 
-Five Swift source files that, if compiled correctly and with the right entitlements, should allow an iOS Shortcut to silently pass LINE notification data into the Tony app's local storage.
+## The Core Experience
+1. **Capture:** พี่คอม highlights a long LINE message and taps "Share to Tony", or taps a button and speaks an instruction.
+2. **Process:** Tony's brain (LLM) instantly categorizes the input into one of the 7 life domains, extracts the urgency, and determines if a decision is needed.
+3. **The Morning Brief:** Every morning, Tony presents a clean, synthesized 3-paragraph summary of everything captured, highlighting only the decisions that require the CEO's attention.
 
-## The One Risk That Must Be Resolved
+## Where We Are Right Now
+- The V1 MVP has been completely redefined (`docs/V1_REVISED_MVP.md`).
+- The Intelligence Architecture (`docs/TONYS_BRAIN.md`) remains fully applicable to this new input method.
+- **The project is unblocked.** 
 
-The most likely failure point is **cross-process data sharing**. iOS App Intents run in a separate process from the main app. Without an App Group entitlement, the intent writes to a different database than the one the UI reads from. The fix is a 10-minute change in Xcode, but it must be done before the test.
-
-## What Needs to Happen
-
-An iOS engineer with a Mac, Xcode, and an iPhone running iOS 27 beta needs to:
-1. Create the Xcode project.
-2. Add the App Group entitlement.
-3. Update two lines of code for the shared container.
-4. Build, run, and send a LINE message.
-
-If the message appears in Tony without opening the app first, the Tracer Bullet passes and we proceed to Week 2.
+## Next Steps
+Engineering can begin immediately. The first task is to build the basic SwiftUI app shell with a pure black "Calm UI", Voice Dictation, and local SwiftData storage. No beta software or physical hardware is required to start this phase.
