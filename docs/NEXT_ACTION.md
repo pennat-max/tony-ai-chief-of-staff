@@ -4,22 +4,23 @@
 
 ---
 
-## LLM API Integration
+## Activate the First Real AI Provider Transport
 
-**What:** Add the first LLM classification pass for the local Tony V1 AI Inbox.
+**What:** Replace the default mock classification path with one approved real provider behind the existing `AIProvider` protocol.
 
-**Context:** Phase 1 is complete. The app already captures manual text and voice dictation into SwiftData as `InboxItem` records. The next step is to classify each captured item without changing the product scope.
+**Context:** The app already has provider architecture and uses `MockProvider` by default. It does not require API keys today. The next phase should choose exactly one real provider transport and keep the same strict JSON contract.
 
 **Steps:**
 1. Open `ios/TonyV1/TonyV1.xcodeproj`.
-2. Add an LLM client layer for classifying `InboxItem.rawText`.
-3. Send raw text to the chosen API with a strict JSON response contract.
-4. Parse and persist:
+2. Choose the first real provider to activate: OpenAI, Claude, or Gemini.
+3. Confirm the approved credential path before adding any real API key usage.
+4. Implement the selected provider behind `AIProvider`.
+5. Keep `MockProvider` available for local development and previews.
+6. Preserve the strict JSON response contract:
    - `domain`
    - `urgency`
    - `actionState`
-5. Keep all existing captures in SwiftData.
-6. Surface classification values in the existing list view.
+7. Persist parsed values to the existing `InboxItem` records.
 
 **Do NOT:**
 - Do not build the Morning Brief yet.

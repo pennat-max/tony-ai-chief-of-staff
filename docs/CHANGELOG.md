@@ -4,6 +4,32 @@ All completed work is recorded here in reverse chronological order. Every AI age
 
 ---
 
+## [v1-ai-provider-abstraction] - June 28, 2026 - ChatGPT (iOS Engineer)
+
+### Added
+- `ios/TonyV1/TonyV1/Services/AIProvider.swift` - Provider protocol and strict `AIClassification` JSON contract.
+- `ios/TonyV1/TonyV1/Services/AIClassificationService.swift` - Service layer that asks a provider for JSON and decodes classification values.
+- `ios/TonyV1/TonyV1/Services/MockProvider.swift` - Default no-key provider that returns mock JSON for local classification.
+- `ios/TonyV1/TonyV1/Services/OpenAIProvider.swift` - Disabled provider shell for future OpenAI transport.
+- `ios/TonyV1/TonyV1/Services/ClaudeProvider.swift` - Disabled provider shell for future Claude transport.
+- `ios/TonyV1/TonyV1/Services/GeminiProvider.swift` - Disabled provider shell for future Gemini transport.
+
+### Changed
+- `ios/TonyV1/TonyV1/Views/ContentView.swift` - Classifies each new local capture with `MockProvider` and persists `domain`, `urgency`, and `actionState` to the same SwiftData `InboxItem`.
+- `docs/STATUS.md` - Updated to `V1_AI_PROVIDER_ABSTRACTION_COMPLETE`.
+- `docs/NEXT_ACTION.md` - Updated to activate the first real provider transport in a later phase.
+
+### Not Included
+- No API keys requested or required.
+- No direct OpenAI integration.
+- No real Claude or Gemini integration.
+- No Morning Brief.
+- No Share Extension.
+- No LINE notification interception.
+- No VIP Filter.
+
+---
+
 ## [v1-phase-1-calm-inbox] - June 28, 2026 - ChatGPT (iOS Engineer)
 
 ### Added

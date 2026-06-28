@@ -7,6 +7,7 @@ struct ContentView: View {
 
     @StateObject private var speechRecognizer = SpeechRecognizer()
     @State private var rawText = ""
+    private let classificationService = AIClassificationService()
 
     private var canCapture: Bool {
         !rawText.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
@@ -115,6 +116,24 @@ struct ContentView: View {
         modelContext.insert(item)
         rawText = ""
         speechRecognizer.transcript = ""
+
+        Task {
+            await classify(item)
+        }
+    }
+
+    @MainActor
+    private func classify(_ item: InboxItem) async {
+        do {
+            let classification = try await classificationService.classify(rawText: item.rawText)
+            item.domain = classification.domain
+            item.urgency = classification.urgency
+            item.actionState = classification.actionState
+        } catch {
+            item.domain = "unclassified"
+            item.urgency = "low"
+            item.actionState = "captured"
+        }
     }
 }
 
