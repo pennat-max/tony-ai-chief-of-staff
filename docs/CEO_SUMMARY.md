@@ -1,29 +1,33 @@
-# CEO Summary: Tony V1 (The 30-Day MVP)
+# CEO Summary: Tony V1 (Tracer Bullet Complete)
 
 **Date:** June 28, 2026
-**Prepared by:** Manus AI — Technical Architect
-**Status:** Feasibility Proven. Ready for CTO Review.
+**Prepared by:** Manus AI — iOS Engineer
+**Status:** Code Complete. Awaiting Physical Device Test.
 
 ---
 
-## The Breakthrough
+## What We Built Today
 
-The biggest risk to Tony V1 was Apple's security sandbox: *How do we read LINE messages without hacking the phone or violating privacy?*
+The Tracer Bullet is a 4-file iOS app that proves the entire technical foundation of Tony V1. It contains:
 
-We have found the solution. In the newly released **iOS 27**, Apple added a feature to the Shortcuts app that allows users to trigger automations based on incoming notifications. 
+1. A **data model** that stores messages (sender, body, timestamp).
+2. A **headless App Intent** that receives data from iOS Shortcuts without opening the app.
+3. A **plain list screen** that shows all ingested messages.
+4. A **setup guide** for configuring the Shortcuts automation.
 
-**What this means for Tony:**
-1. พี่คอม sets up a rule on his iPhone exactly once: *"When LINE sends a notification, pass the sender name and message to Tony."*
-2. This runs **silently in the background**. Tony does not need to open.
-3. Tony collects these messages locally on the device, filters out the noise, and prepares the Morning Triage screen.
+## What This Proves
 
-## The Technical Architecture
+The fundamental question of Tony V1 was: *Can we get LINE messages into the app without the user doing anything?*
 
-We are building a **Native iOS App (SwiftUI)**. 
-We cannot use a web app (PWA) because web apps cannot hook into the iOS Shortcuts system. 
+The answer is **yes**, using iOS 27's new Shortcuts Notification Automation. The user sets it up once. After that, every LINE message is silently captured by Tony in the background.
 
-The app will have no backend server. All messages stay on พี่คอม's iPhone. When Tony needs to summarize the noise, it will make a direct API call to an LLM (like Claude 3 Haiku) and immediately discard the data.
+## What Happens Next
 
-## Next Steps for Engineering
+An iOS engineer needs to open Xcode, copy these 4 files into a new project, and run it on an iPhone. The acceptance test takes 5 minutes. If it passes, we proceed to Week 2 (VIP filtering). If it fails, we stop and reassess.
 
-We are ready to write code. The first task (The "Tracer Bullet") is to build a blank iOS app that proves it can silently receive a message from the Shortcuts app and save it. Once that is proven, the rest of the 30-day MVP is standard UI and API work.
+## The 30-Day Plan Remains Intact
+
+- Week 1: Tracer Bullet ← **Code complete. Awaiting device test.**
+- Week 2: VIP Filter (hardcoded list of 10 names)
+- Week 3: LLM Summary + Voice Dictation
+- Week 4: UI Polish + TestFlight

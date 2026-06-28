@@ -4,18 +4,20 @@
 
 ---
 
-## Build the "Tracer Bullet" Ingestion Pipeline (Week 1)
+## Compile and Run the Tracer Bullet on a Physical iPhone
 
-**What to build:** A bare-bones SwiftUI app targeting iOS 27 that exposes a custom App Intent (`IngestMessageIntent`). The intent must accept `sender` and `body` strings and save them to local storage. 
-
-**Why this first:** We must prove that an iOS 27 Shortcuts Notification Automation can silently pass data from a third-party notification into our app's local storage without user intervention. If this fails, V1 fails.
-
-**Where to read before starting:**
-1. `docs/V1_TECHNICAL_FEASIBILITY.md` — Read the architectural decision and the Week 1 Acceptance Test.
+**What to do:**
+1. Open Xcode 16+.
+2. Create a new SwiftUI project named `TonyTracerBullet` (see `ios/TonyTracerBullet/README_XCODE.md`).
+3. Copy the 5 source files from `ios/TonyTracerBullet/TonyTracerBullet/` into the project.
+4. Set Deployment Target to iOS 27.
+5. Build and run on a physical iPhone running iOS 27 beta.
+6. Follow `ios/TonyTracerBullet/SHORTCUTS_SETUP.md` to configure the Shortcuts automation.
+7. Run the acceptance test.
 
 **Acceptance Criteria:**
-- The app exposes `IngestMessageIntent` to the iOS Shortcuts app.
-- A user can map a notification's `Title` and `Body` to this intent in the Shortcuts app.
-- The app successfully saves the data to local storage while running in the background.
+- App closed. LINE message received. Open Tony. Message is in the list.
 
-**When done:** Update `docs/STATUS.md` to reflect completion, add to `docs/CHANGELOG.md`, and set the new `docs/NEXT_ACTION.md`.
+**If it passes:** Update `docs/STATUS.md` to `TRACER_BULLET_PASSED_ON_DEVICE`, add to `CHANGELOG.md`, and set `NEXT_ACTION.md` to "Build VIP Filter (Week 2)".
+
+**If it fails:** Document the exact failure in `docs/TRACER_BULLET_RESULT.md` and update `STATUS.md` to `TRACER_BULLET_FAILED`. Stop and wait for Product Owner decision.
