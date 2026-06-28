@@ -1,0 +1,1221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+  <title>Tony — AI Chief of Staff · Interactive Prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* ===================== RESET & BASE ===================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { height: 100%; background: #0a0a0c; font-family: 'Inter', sans-serif; color: #ededed; overflow: hidden; }
+
+    /* ===================== DESIGN TOKENS ===================== */
+    :root {
+      --bg-primary: #121214;
+      --bg-secondary: #1c1c1e;
+      --bg-tertiary: #252528;
+      --text-primary: #ededed;
+      --text-secondary: #a0a0a0;
+      --text-muted: #666;
+      --accent-blue: #2563eb;
+      --accent-blue-light: #3b82f6;
+      --accent-red: #dc2626;
+      --accent-green: #059669;
+      --accent-orange: #d97706;
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 24px;
+      --shadow-card: 0 4px 12px rgba(0,0,0,0.4);
+      --shadow-elevated: 0 12px 24px rgba(0,0,0,0.5);
+    }
+
+    /* ===================== PHONE SHELL ===================== */
+    .phone-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      padding: 20px;
+      gap: 40px;
+      flex-wrap: wrap;
+    }
+
+    .phone-shell {
+      width: 390px;
+      height: 844px;
+      background: #000;
+      border-radius: 54px;
+      border: 2px solid #333;
+      box-shadow: 0 40px 80px rgba(0,0,0,0.8), inset 0 0 0 1px #444;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 0; left: 50%;
+      transform: translateX(-50%);
+      width: 120px; height: 34px;
+      background: #000;
+      border-radius: 0 0 20px 20px;
+      z-index: 100;
+    }
+
+    .phone-screen {
+      position: absolute;
+      inset: 0;
+      border-radius: 52px;
+      overflow: hidden;
+      background: var(--bg-primary);
+    }
+
+    /* ===================== STATUS BAR ===================== */
+    .status-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px 28px 0;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-primary);
+      position: relative;
+      z-index: 10;
+    }
+    .status-bar .time { font-size: 15px; font-weight: 700; }
+    .status-icons { display: flex; gap: 6px; align-items: center; }
+    .status-icons svg { width: 16px; height: 16px; fill: var(--text-primary); }
+
+    /* ===================== SCREENS ===================== */
+    .screen {
+      position: absolute;
+      inset: 0;
+      background: var(--bg-primary);
+      border-radius: 52px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      display: none;
+      flex-direction: column;
+      padding-bottom: 90px;
+      scrollbar-width: none;
+    }
+    .screen::-webkit-scrollbar { display: none; }
+    .screen.active { display: flex; }
+
+    /* ===================== NAV BAR ===================== */
+    .nav-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 24px 8px;
+      position: sticky;
+      top: 0;
+      background: var(--bg-primary);
+      z-index: 10;
+    }
+    .nav-bar .nav-title { font-size: 17px; font-weight: 600; }
+    .nav-bar .nav-back {
+      display: flex; align-items: center; gap: 4px;
+      color: var(--accent-blue-light); font-size: 16px; font-weight: 500;
+      cursor: pointer; background: none; border: none;
+    }
+    .nav-bar .nav-back svg { width: 20px; height: 20px; fill: var(--accent-blue-light); }
+    .status-dot {
+      width: 10px; height: 10px;
+      background: var(--accent-blue);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.6; transform: scale(0.85); }
+    }
+    .nav-icon { cursor: pointer; background: none; border: none; color: var(--text-secondary); }
+    .nav-icon svg { width: 22px; height: 22px; fill: var(--text-secondary); }
+
+    /* ===================== BOTTOM INPUT BAR ===================== */
+    .input-bar {
+      position: fixed;
+      bottom: 0;
+      width: 390px;
+      padding: 12px 20px 28px;
+      background: linear-gradient(to top, var(--bg-primary) 70%, transparent);
+      z-index: 50;
+    }
+    .input-inner {
+      display: flex;
+      align-items: center;
+      background: var(--bg-secondary);
+      border-radius: 30px;
+      padding: 12px 16px;
+      gap: 12px;
+      border: 1px solid #2a2a2e;
+    }
+    .input-inner input {
+      flex: 1; background: none; border: none; outline: none;
+      color: var(--text-secondary); font-family: 'Inter', sans-serif;
+      font-size: 15px;
+    }
+    .input-inner input::placeholder { color: var(--text-muted); }
+    .input-btn {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--accent-blue); border: none; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .input-btn svg { width: 18px; height: 18px; fill: white; }
+    .mic-btn { background: none; border: none; cursor: pointer; }
+    .mic-btn svg { width: 22px; height: 22px; fill: var(--text-secondary); }
+
+    /* ===================== BOTTOM TAB BAR ===================== */
+    .tab-bar {
+      position: fixed;
+      bottom: 0;
+      width: 390px;
+      background: rgba(18,18,20,0.95);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid #2a2a2e;
+      display: flex;
+      justify-content: space-around;
+      align-items: center;
+      padding: 10px 0 24px;
+      z-index: 60;
+    }
+    .tab-item {
+      display: flex; flex-direction: column; align-items: center;
+      gap: 4px; cursor: pointer; background: none; border: none;
+      color: var(--text-muted); font-size: 10px; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .tab-item.active { color: var(--accent-blue); }
+    .tab-item svg { width: 24px; height: 24px; fill: currentColor; }
+
+    /* ===================== CARDS ===================== */
+    .card {
+      background: var(--bg-secondary);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      border: 1px solid #2a2a2e;
+      box-shadow: var(--shadow-card);
+    }
+    .card-header {
+      display: flex; align-items: flex-start; gap: 12px; margin-bottom: 10px;
+    }
+    .card-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .card-icon.orange { background: rgba(217,119,6,0.15); }
+    .card-icon.red { background: rgba(220,38,38,0.15); }
+    .card-icon.blue { background: rgba(37,99,235,0.15); }
+    .card-icon.green { background: rgba(5,150,105,0.15); }
+    .card-icon svg { width: 20px; height: 20px; }
+    .card-icon.orange svg { fill: var(--accent-orange); }
+    .card-icon.red svg { fill: var(--accent-red); }
+    .card-icon.blue svg { fill: var(--accent-blue-light); }
+    .card-icon.green svg { fill: var(--accent-green); }
+    .card-title { font-size: 15px; font-weight: 600; color: var(--text-primary); margin-bottom: 3px; }
+    .card-subtitle { font-size: 13px; color: var(--text-secondary); }
+    .card-meta { font-size: 11px; color: var(--text-muted); margin-left: auto; flex-shrink: 0; }
+    .card-actions { display: flex; gap: 8px; margin-top: 12px; }
+
+    /* ===================== BUTTONS ===================== */
+    .btn {
+      padding: 9px 16px; border-radius: 20px; font-family: 'Inter', sans-serif;
+      font-size: 13px; font-weight: 600; cursor: pointer; border: none;
+      transition: all 0.15s; display: inline-flex; align-items: center; gap: 6px;
+    }
+    .btn-primary { background: var(--accent-blue); color: white; }
+    .btn-primary:hover { background: var(--accent-blue-light); }
+    .btn-ghost { background: transparent; color: var(--text-primary); border: 1px solid #3a3a3e; }
+    .btn-ghost:hover { background: var(--bg-tertiary); }
+    .btn-danger { background: transparent; color: var(--accent-red); border: 1px solid rgba(220,38,38,0.3); }
+    .btn-full { width: 100%; justify-content: center; padding: 14px; border-radius: var(--radius-md); font-size: 15px; }
+
+    /* ===================== CHIPS ===================== */
+    .chip-row { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0; scrollbar-width: none; }
+    .chip-row::-webkit-scrollbar { display: none; }
+    .chip {
+      padding: 6px 14px; border-radius: 20px; font-size: 13px; font-weight: 500;
+      white-space: nowrap; cursor: pointer; border: none; transition: all 0.15s;
+    }
+    .chip.active { background: var(--accent-blue); color: white; }
+    .chip.inactive { background: var(--bg-secondary); color: var(--text-secondary); border: 1px solid #2a2a2e; }
+
+    /* ===================== SECTION HEADERS ===================== */
+    .section-label {
+      font-size: 11px; font-weight: 600; letter-spacing: 0.08em;
+      color: var(--text-muted); text-transform: uppercase; margin-bottom: 10px;
+    }
+
+    /* ===================== CONTEXT PILLS ===================== */
+    .pill {
+      display: inline-flex; align-items: center; gap: 5px;
+      background: var(--bg-tertiary); border-radius: 20px;
+      padding: 4px 10px; font-size: 12px; color: var(--text-secondary);
+      cursor: pointer; border: 1px solid #2a2a2e;
+    }
+    .pill svg { width: 12px; height: 12px; fill: var(--text-muted); }
+
+    /* ===================== SCREEN: ONBOARDING ===================== */
+    #screen-onboarding {
+      background: #0a0a0c;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 32px 60px;
+      gap: 0;
+    }
+    .logo-mark {
+      width: 80px; height: 80px; margin: 0 auto 16px;
+      background: linear-gradient(135deg, #1d4ed8, #3b82f6);
+      border-radius: 22px;
+      display: flex; align-items: center; justify-content: center;
+      box-shadow: 0 0 40px rgba(37,99,235,0.4);
+    }
+    .logo-mark span { font-size: 42px; font-weight: 800; color: white; }
+    .onboarding-title { font-size: 36px; font-weight: 800; margin-bottom: 8px; }
+    .onboarding-sub { font-size: 17px; color: var(--text-secondary); margin-bottom: 24px; }
+    .onboarding-desc { font-size: 15px; color: var(--text-secondary); line-height: 1.6; max-width: 280px; margin: 0 auto 32px; }
+    .feature-cards {
+      display: flex; gap: 10px; justify-content: center; margin-bottom: 40px;
+    }
+    .feature-card {
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: var(--radius-md); padding: 16px 12px;
+      width: 100px; text-align: center;
+    }
+    .feature-card svg { width: 28px; height: 28px; fill: var(--accent-blue-light); margin-bottom: 8px; }
+    .feature-card span { font-size: 11px; color: var(--text-secondary); font-weight: 500; display: block; }
+    .onboarding-actions { width: 100%; display: flex; flex-direction: column; gap: 10px; }
+    .onboarding-legal { font-size: 11px; color: var(--text-muted); margin-top: 16px; }
+    .onboarding-legal a { color: var(--accent-blue-light); }
+
+    /* ===================== SCREEN: THE NOW ===================== */
+    #screen-now { padding: 0; }
+    .now-greeting { padding: 20px 24px 16px; }
+    .now-greeting h1 { font-size: 30px; font-weight: 800; margin-bottom: 4px; }
+    .now-greeting p { font-size: 14px; color: var(--text-secondary); }
+    .now-section { padding: 0 20px 20px; }
+    .schedule-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 10px 0; border-bottom: 1px solid #1e1e20;
+    }
+    .schedule-item:last-child { border-bottom: none; }
+    .schedule-time { font-size: 12px; color: var(--text-muted); width: 56px; flex-shrink: 0; }
+    .schedule-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--text-muted); flex-shrink: 0; }
+    .schedule-dot.active { background: var(--accent-blue); box-shadow: 0 0 6px var(--accent-blue); }
+    .schedule-title { font-size: 14px; color: var(--text-primary); }
+
+    /* ===================== SCREEN: THE STREAM ===================== */
+    #screen-stream { padding: 0 0 100px; }
+    .stream-content { padding: 16px 20px; display: flex; flex-direction: column; gap: 16px; }
+    .msg-user {
+      align-self: flex-end; max-width: 75%;
+      background: var(--accent-blue); color: white;
+      border-radius: 18px 18px 4px 18px;
+      padding: 12px 16px; font-size: 14px; line-height: 1.5;
+    }
+    .msg-tony { align-self: flex-start; max-width: 90%; }
+    .msg-tony-label {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--text-muted); margin-bottom: 6px;
+    }
+    .msg-tony-label svg { width: 14px; height: 14px; fill: var(--accent-blue-light); }
+    .msg-tony-text { font-size: 14px; color: var(--text-secondary); line-height: 1.6; }
+    .msg-time { font-size: 11px; color: var(--text-muted); margin-top: 4px; text-align: right; }
+    .option-card {
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: var(--radius-md); padding: 14px; margin-top: 8px;
+    }
+    .option-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+    .option-badge { background: var(--accent-blue); color: white; font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+    .option-title { font-size: 15px; font-weight: 600; }
+    .option-total { font-size: 17px; font-weight: 700; color: var(--text-primary); }
+    .option-row { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-secondary); padding: 3px 0; }
+    .option-actions { display: flex; gap: 8px; margin-top: 10px; }
+    .suggestion-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+    .suggestion-chip {
+      display: flex; align-items: center; gap: 6px;
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: 20px; padding: 7px 12px; font-size: 13px;
+      color: var(--text-secondary); cursor: pointer;
+    }
+    .suggestion-chip svg { width: 14px; height: 14px; fill: var(--text-muted); }
+
+    /* ===================== SCREEN: MEETING PREP ===================== */
+    #screen-meeting { padding: 0 0 100px; }
+    .meeting-hero { padding: 20px 24px 0; }
+    .meeting-hero h1 { font-size: 26px; font-weight: 800; margin-bottom: 6px; }
+    .meeting-meta { font-size: 13px; color: var(--text-secondary); margin-bottom: 16px; }
+    .meeting-section { padding: 16px 20px 0; }
+    .agenda-item {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 16px; background: var(--bg-secondary);
+      border-radius: var(--radius-sm); margin-bottom: 4px;
+    }
+    .agenda-num {
+      width: 24px; height: 24px; background: var(--bg-tertiary);
+      border-radius: 6px; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700; color: var(--text-muted); flex-shrink: 0;
+    }
+    .agenda-text { font-size: 14px; color: var(--text-primary); }
+    .attendees-row { display: flex; gap: 12px; overflow-x: auto; padding: 4px 0; scrollbar-width: none; }
+    .attendee {
+      display: flex; flex-direction: column; align-items: center; gap: 6px;
+      cursor: pointer; flex-shrink: 0;
+    }
+    .attendee-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700; color: var(--text-secondary);
+      border: 2px solid transparent; position: relative;
+    }
+    .attendee-avatar.organizer { border-color: var(--accent-blue); }
+    .attendee-status {
+      position: absolute; bottom: 1px; right: 1px;
+      width: 12px; height: 12px; border-radius: 50%;
+      background: var(--accent-green); border: 2px solid var(--bg-primary);
+    }
+    .attendee-name { font-size: 11px; color: var(--text-secondary); text-align: center; max-width: 60px; }
+    .attendee-role { font-size: 10px; color: var(--accent-blue-light); }
+    .context-card {
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: var(--radius-md); padding: 14px;
+      display: flex; align-items: center; gap: 12px; cursor: pointer;
+    }
+    .context-avatar {
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center;
+      font-size: 16px; font-weight: 700; color: var(--text-secondary); flex-shrink: 0;
+    }
+    .context-info { flex: 1; }
+    .context-name { font-size: 14px; font-weight: 600; margin-bottom: 2px; }
+    .context-detail { font-size: 12px; color: var(--text-secondary); }
+    .context-link { font-size: 12px; color: var(--accent-blue-light); }
+    .assets-row { display: flex; gap: 10px; overflow-x: auto; padding: 4px 0; scrollbar-width: none; }
+    .asset-card {
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: var(--radius-md); padding: 12px;
+      min-width: 90px; text-align: center; flex-shrink: 0; cursor: pointer;
+    }
+    .asset-icon { font-size: 24px; margin-bottom: 6px; }
+    .asset-name { font-size: 11px; color: var(--text-secondary); font-weight: 500; }
+    .quick-actions { display: flex; gap: 8px; padding: 0 20px 16px; }
+
+    /* ===================== SCREEN: THE ATLAS ===================== */
+    #screen-atlas { padding: 0 0 100px; }
+    .search-bar {
+      margin: 8px 20px 16px;
+      display: flex; align-items: center; gap: 10px;
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: 30px; padding: 12px 16px;
+    }
+    .search-bar svg { width: 18px; height: 18px; fill: var(--text-muted); flex-shrink: 0; }
+    .search-bar input {
+      flex: 1; background: none; border: none; outline: none;
+      color: var(--text-primary); font-family: 'Inter', sans-serif; font-size: 15px;
+    }
+    .atlas-section { padding: 0 20px 16px; }
+    .result-card {
+      display: flex; align-items: flex-start; gap: 12px;
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: var(--radius-md); padding: 14px; margin-bottom: 8px;
+      cursor: pointer; transition: background 0.15s;
+    }
+    .result-card:hover { background: var(--bg-tertiary); }
+    .result-icon {
+      width: 40px; height: 40px; border-radius: 10px;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .result-icon.doc { background: rgba(37,99,235,0.15); }
+    .result-icon.email { background: rgba(124,58,237,0.15); }
+    .result-icon.cal { background: rgba(5,150,105,0.15); }
+    .result-icon.chat { background: rgba(217,119,6,0.15); }
+    .result-icon.doc svg { fill: var(--accent-blue-light); }
+    .result-icon.email svg { fill: #a78bfa; }
+    .result-icon.cal svg { fill: var(--accent-green); }
+    .result-icon.chat svg { fill: var(--accent-orange); }
+    .result-icon svg { width: 20px; height: 20px; }
+    .result-body { flex: 1; }
+    .result-title { font-size: 14px; font-weight: 600; margin-bottom: 3px; }
+    .result-meta { font-size: 12px; color: var(--text-secondary); margin-bottom: 8px; }
+    .result-pills { display: flex; gap: 6px; flex-wrap: wrap; }
+
+    /* ===================== SCREEN: ACTION CARD DETAIL ===================== */
+    #screen-email-detail { padding: 0 0 100px; }
+    .detail-section { padding: 16px 20px 0; }
+    .email-card {
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: var(--radius-md); padding: 16px;
+    }
+    .email-from { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+    .email-avatar {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--bg-tertiary); display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700; color: var(--text-secondary);
+    }
+    .email-from-name { font-size: 14px; font-weight: 600; }
+    .email-from-time { font-size: 12px; color: var(--text-muted); }
+    .email-subject { font-size: 13px; color: var(--text-secondary); margin-bottom: 10px; }
+    .email-body { font-size: 14px; color: var(--text-primary); line-height: 1.6; }
+    .draft-card {
+      background: var(--bg-tertiary); border: 1px solid #2a2a2e;
+      border-radius: var(--radius-md); padding: 16px;
+    }
+    .draft-label { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; color: var(--accent-blue-light); text-transform: uppercase; margin-bottom: 10px; }
+    .draft-body { font-size: 14px; color: var(--text-primary); line-height: 1.7; }
+    .reasoning-item { display: flex; align-items: flex-start; gap: 10px; padding: 8px 0; border-bottom: 1px solid #1e1e20; }
+    .reasoning-item:last-child { border-bottom: none; }
+    .reasoning-check { width: 20px; height: 20px; border-radius: 50%; background: rgba(5,150,105,0.15); display: flex; align-items: center; justify-content: center; flex-shrink: 0; margin-top: 1px; }
+    .reasoning-check svg { width: 12px; height: 12px; fill: var(--accent-green); }
+    .reasoning-text { font-size: 13px; color: var(--text-secondary); line-height: 1.5; }
+    .detail-actions { padding: 16px 20px; display: flex; flex-direction: column; gap: 8px; }
+
+    /* ===================== SCREEN: SETTINGS ===================== */
+    #screen-settings { padding: 0 0 100px; }
+    .profile-card {
+      margin: 8px 20px 16px;
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: var(--radius-lg); padding: 16px;
+      display: flex; align-items: center; gap: 14px;
+    }
+    .profile-avatar {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: linear-gradient(135deg, #1d4ed8, #7c3aed);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; font-weight: 700; color: white; flex-shrink: 0;
+    }
+    .profile-name { font-size: 16px; font-weight: 700; }
+    .profile-email { font-size: 13px; color: var(--text-secondary); }
+    .plan-badge { display: inline-flex; align-items: center; gap: 4px; background: rgba(37,99,235,0.15); color: var(--accent-blue-light); font-size: 11px; font-weight: 600; padding: 3px 8px; border-radius: 6px; margin-top: 4px; }
+    .settings-section { padding: 0 20px 16px; }
+    .integration-row {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: var(--radius-md); padding: 14px; margin-bottom: 4px;
+    }
+    .integration-icon { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+    .integration-info { flex: 1; }
+    .integration-name { font-size: 14px; font-weight: 600; }
+    .integration-status { font-size: 12px; display: flex; align-items: center; gap: 5px; margin-top: 2px; }
+    .dot-green { width: 7px; height: 7px; border-radius: 50%; background: var(--accent-green); }
+    .dot-gray { width: 7px; height: 7px; border-radius: 50%; background: var(--text-muted); }
+    .status-connected { color: var(--accent-green); }
+    .status-disconnected { color: var(--text-muted); }
+    .settings-row {
+      display: flex; align-items: center; gap: 12px;
+      background: var(--bg-secondary); border: 1px solid #2a2a2e;
+      border-radius: var(--radius-md); padding: 14px; margin-bottom: 4px;
+    }
+    .settings-row-icon { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .settings-row-icon.blue { background: rgba(37,99,235,0.15); }
+    .settings-row-icon.blue svg { fill: var(--accent-blue-light); }
+    .settings-row-icon.red { background: rgba(220,38,38,0.15); }
+    .settings-row-icon.red svg { fill: var(--accent-red); }
+    .settings-row-icon svg { width: 16px; height: 16px; }
+    .settings-row-label { flex: 1; font-size: 14px; }
+    .settings-row-value { font-size: 13px; color: var(--text-secondary); }
+    .settings-row-label.danger { color: var(--accent-red); }
+    .toggle {
+      width: 44px; height: 26px; border-radius: 13px; background: var(--accent-blue);
+      position: relative; cursor: pointer; flex-shrink: 0;
+    }
+    .toggle::after {
+      content: ''; position: absolute; top: 3px; right: 3px;
+      width: 20px; height: 20px; border-radius: 50%; background: white;
+      transition: transform 0.2s;
+    }
+
+    /* ===================== PROTOTYPE NAV LABEL ===================== */
+    .prototype-label {
+      position: absolute; bottom: -36px; left: 50%; transform: translateX(-50%);
+      font-size: 12px; color: #555; white-space: nowrap;
+    }
+
+    /* ===================== SIDEBAR NAVIGATION ===================== */
+    .sidebar {
+      background: #0f0f11;
+      border: 1px solid #1e1e22;
+      border-radius: 20px;
+      padding: 24px 20px;
+      width: 220px;
+      height: 844px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .sidebar-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; color: var(--text-primary); }
+    .sidebar-item {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 14px; border-radius: var(--radius-md);
+      cursor: pointer; font-size: 14px; font-weight: 500;
+      color: var(--text-secondary); background: none; border: none;
+      transition: all 0.15s; text-align: left; width: 100%;
+    }
+    .sidebar-item:hover { background: var(--bg-secondary); color: var(--text-primary); }
+    .sidebar-item.active { background: rgba(37,99,235,0.15); color: var(--accent-blue-light); }
+    .sidebar-item svg { width: 18px; height: 18px; fill: currentColor; flex-shrink: 0; }
+    .sidebar-divider { height: 1px; background: #1e1e22; margin: 8px 0; }
+    .sidebar-section-label { font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; padding: 4px 14px; }
+  </style>
+</head>
+<body>
+
+<div class="phone-wrapper">
+
+  <!-- SIDEBAR NAVIGATION -->
+  <div class="sidebar">
+    <div class="sidebar-title">Tony</div>
+    <div class="sidebar-section-label">Screens</div>
+    <button class="sidebar-item" onclick="showScreen('onboarding')">
+      <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/></svg>
+      Onboarding
+    </button>
+    <button class="sidebar-item active" onclick="showScreen('now')">
+      <svg viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+      The Now
+    </button>
+    <button class="sidebar-item" onclick="showScreen('stream')">
+      <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+      The Stream
+    </button>
+    <button class="sidebar-item" onclick="showScreen('meeting')">
+      <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+      Meeting Prep
+    </button>
+    <button class="sidebar-item" onclick="showScreen('atlas')">
+      <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+      The Atlas
+    </button>
+    <button class="sidebar-item" onclick="showScreen('email-detail')">
+      <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+      Email Draft
+    </button>
+    <button class="sidebar-item" onclick="showScreen('settings')">
+      <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+      Settings
+    </button>
+    <div class="sidebar-divider"></div>
+    <div style="font-size:11px;color:#444;padding:8px 14px;line-height:1.6;">
+      Tony · Interactive Prototype<br/>v1.0 · Manus AI
+    </div>
+  </div>
+
+  <!-- PHONE SHELL -->
+  <div style="position:relative;">
+    <div class="phone-shell">
+      <div class="phone-notch"></div>
+      <div class="phone-screen">
+
+        <!-- ==================== ONBOARDING ==================== -->
+        <div id="screen-onboarding" class="screen">
+          <div class="logo-mark"><span>T</span></div>
+          <div class="onboarding-title">Tony</div>
+          <div class="onboarding-sub">Your AI Chief of Staff</div>
+          <div class="onboarding-desc">Tony manages your work, life, and decisions — so you can focus on what matters most.</div>
+          <div class="feature-cards">
+            <div class="feature-card">
+              <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+              <span>Work &amp; Meetings</span>
+            </div>
+            <div class="feature-card">
+              <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+              <span>Finance &amp; Health</span>
+            </div>
+            <div class="feature-card">
+              <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
+              <span>Relationships</span>
+            </div>
+          </div>
+          <div class="onboarding-actions">
+            <button class="btn btn-primary btn-full" onclick="showScreen('now')">Get Started</button>
+            <button class="btn btn-ghost btn-full" onclick="showScreen('now')">Sign In</button>
+          </div>
+          <div class="onboarding-legal">By continuing, you agree to our <a href="#">Terms</a> and <a href="#">Privacy Policy</a></div>
+        </div>
+
+        <!-- ==================== THE NOW ==================== -->
+        <div id="screen-now" class="screen active">
+          <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="status-icons">
+              <svg viewBox="0 0 24 24"><path d="M1.5 8.43l2.12 2.12C4.93 9.24 6.36 8.5 8 8.5s3.07.74 4.38 2.05l2.12-2.12C12.79 6.72 10.51 5.5 8 5.5S3.21 6.72 1.5 8.43zm6.5 9.07l2-2-2-2-2 2 2 2zm4.24-4.24l2.12-2.12C13.07 9.86 10.62 9 8 9s-5.07.86-6.86 2.14l2.12 2.12C4.51 12.41 6.18 12 8 12s3.49.41 4.74 1.26z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+          </div>
+          <div class="nav-bar">
+            <div class="status-dot"></div>
+            <span class="nav-title">Tony</span>
+            <button class="nav-icon" onclick="showScreen('settings')">
+              <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+            </button>
+          </div>
+          <div class="now-greeting">
+            <h1>Good Morning, Sarah</h1>
+            <p>Friday, June 28 · 7 active items</p>
+          </div>
+          <div class="now-section">
+            <div class="chip-row">
+              <button class="chip active">All</button>
+              <button class="chip inactive">Urgent</button>
+              <button class="chip inactive">Today</button>
+              <button class="chip inactive">This Week</button>
+            </div>
+          </div>
+          <div class="now-section">
+            <div class="section-label">Today's Focus</div>
+            <div class="card" style="margin-bottom:10px;">
+              <div class="card-header">
+                <div class="card-icon orange">
+                  <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 15h-2v-2h2v2zm0-4h-2V7h2v6z"/></svg>
+                </div>
+                <div>
+                  <div class="card-title">Meeting Canceled — 10 AM</div>
+                  <div class="card-subtitle">I've blocked this for deep work. 2 hours freed.</div>
+                </div>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-primary">Approve</button>
+                <button class="btn btn-ghost">Reschedule</button>
+              </div>
+            </div>
+            <div class="card" style="margin-bottom:10px; cursor:pointer;" onclick="showScreen('email-detail')">
+              <div class="card-header">
+                <div class="card-icon red">
+                  <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+                </div>
+                <div>
+                  <div class="card-title">Sarah Jenkins — Q3 Budget</div>
+                  <div class="card-subtitle">Arrived 11:23 PM · Draft reply ready</div>
+                </div>
+                <span class="card-meta">11:23 PM</span>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-primary" onclick="event.stopPropagation();showScreen('email-detail')">View Draft</button>
+                <button class="btn btn-ghost">Dismiss</button>
+              </div>
+            </div>
+            <div class="card" style="cursor:pointer;" onclick="showScreen('meeting')">
+              <div class="card-header">
+                <div class="card-icon blue">
+                  <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+                </div>
+                <div>
+                  <div class="card-title">Design Team Meeting in 2 hours</div>
+                  <div class="card-subtitle">Prep brief ready · 4 attendees</div>
+                </div>
+              </div>
+              <div class="card-actions">
+                <button class="btn btn-primary" onclick="event.stopPropagation();showScreen('meeting')">View Brief</button>
+              </div>
+            </div>
+          </div>
+          <div class="now-section">
+            <div class="section-label">Today's Schedule</div>
+            <div class="card">
+              <div class="schedule-item">
+                <span class="schedule-time">9:00 AM</span>
+                <div class="schedule-dot active"></div>
+                <span class="schedule-title">Focus Time (Deep Work)</span>
+              </div>
+              <div class="schedule-item">
+                <span class="schedule-time">11:00 AM</span>
+                <div class="schedule-dot"></div>
+                <span class="schedule-title" style="cursor:pointer;" onclick="showScreen('meeting')">Design Team Meeting</span>
+              </div>
+              <div class="schedule-item">
+                <span class="schedule-time">1:00 PM</span>
+                <div class="schedule-dot"></div>
+                <span class="schedule-title">Lunch with Olivia</span>
+              </div>
+              <div class="schedule-item">
+                <span class="schedule-time">3:30 PM</span>
+                <div class="schedule-dot"></div>
+                <span class="schedule-title">Quarterly Business Review</span>
+              </div>
+            </div>
+          </div>
+          <div class="input-bar">
+            <div class="input-inner">
+              <button class="mic-btn">
+                <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+              </button>
+              <input type="text" placeholder="Ask Tony anything..." onclick="showScreen('stream')" />
+              <button class="input-btn" onclick="showScreen('stream')">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== THE STREAM ==================== -->
+        <div id="screen-stream" class="screen">
+          <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="status-icons">
+              <svg viewBox="0 0 24 24"><path d="M1.5 8.43l2.12 2.12C4.93 9.24 6.36 8.5 8 8.5s3.07.74 4.38 2.05l2.12-2.12C12.79 6.72 10.51 5.5 8 5.5S3.21 6.72 1.5 8.43zm6.5 9.07l2-2-2-2-2 2 2 2zm4.24-4.24l2.12-2.12C13.07 9.86 10.62 9 8 9s-5.07.86-6.86 2.14l2.12 2.12C4.51 12.41 6.18 12 8 12s3.49.41 4.74 1.26z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+          </div>
+          <div class="nav-bar">
+            <button class="nav-back" onclick="showScreen('now')">
+              <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+              Back
+            </button>
+            <span class="nav-title">The Stream</span>
+            <div class="status-dot"></div>
+          </div>
+          <div class="stream-content">
+            <div class="msg-user">Plan a vacation to Japan for two weeks in July. Budget is $8,000.</div>
+            <div style="font-size:11px;color:var(--text-muted);text-align:right;">9:15 AM</div>
+            <div class="msg-tony">
+              <div class="msg-tony-label">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                Tony
+              </div>
+              <div class="msg-tony-text">I found three options that fit your criteria. All include flights, accommodation, and activities.</div>
+              <div class="option-card">
+                <div class="option-header">
+                  <div style="display:flex;align-items:center;gap:8px;"><span class="option-badge">A</span><span class="option-title">Tokyo + Kyoto</span></div>
+                  <span class="option-total">$7,200</span>
+                </div>
+                <div class="option-row"><span>Flights</span><span>$1,200</span></div>
+                <div class="option-row"><span>Hotel (14 nights)</span><span>$3,600</span></div>
+                <div class="option-row"><span>Activities</span><span>$2,400</span></div>
+                <div class="option-actions">
+                  <button class="btn btn-ghost" style="font-size:12px;padding:7px 12px;">Expand</button>
+                  <button class="btn btn-primary" style="font-size:12px;padding:7px 12px;">Select</button>
+                </div>
+              </div>
+              <div class="option-card" style="margin-top:8px;">
+                <div class="option-header">
+                  <div style="display:flex;align-items:center;gap:8px;"><span class="option-badge">B</span><span class="option-title">Tokyo + Osaka + Hiroshima</span></div>
+                  <span class="option-total">$7,800</span>
+                </div>
+                <div class="option-row"><span>Flights</span><span>$1,400</span></div>
+                <div class="option-row"><span>Hotel (14 nights)</span><span>$3,800</span></div>
+                <div class="option-row"><span>Activities</span><span>$2,600</span></div>
+                <div class="option-actions">
+                  <button class="btn btn-ghost" style="font-size:12px;padding:7px 12px;">Expand</button>
+                  <button class="btn btn-primary" style="font-size:12px;padding:7px 12px;">Select</button>
+                </div>
+              </div>
+              <div class="option-card" style="margin-top:8px;">
+                <div class="option-header">
+                  <div style="display:flex;align-items:center;gap:8px;"><span class="option-badge">C</span><span class="option-title">Tokyo + Mt. Fuji + Yokohama</span></div>
+                  <span class="option-total">$6,700</span>
+                </div>
+                <div class="option-row"><span>Flights</span><span>$1,100</span></div>
+                <div class="option-row"><span>Hotel (14 nights)</span><span>$3,400</span></div>
+                <div class="option-row"><span>Activities</span><span>$2,200</span></div>
+                <div class="option-actions">
+                  <button class="btn btn-ghost" style="font-size:12px;padding:7px 12px;">Expand</button>
+                  <button class="btn btn-primary" style="font-size:12px;padding:7px 12px;">Select</button>
+                </div>
+              </div>
+            </div>
+            <div class="msg-user">Can you adjust Option B to include Nara?</div>
+            <div style="font-size:11px;color:var(--text-muted);text-align:right;">9:22 AM</div>
+            <div class="msg-tony">
+              <div class="msg-tony-label">
+                <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>
+                Tony
+              </div>
+              <div class="msg-tony-text">Updated Option B with Nara. New total: <strong style="color:var(--accent-red)">$8,100</strong>. This exceeds your budget by $100. How would you like to adjust?</div>
+              <div class="suggestion-chips">
+                <div class="suggestion-chip">
+                  <svg viewBox="0 0 24 24"><path d="M19 13H5v-2h14v2z"/></svg>
+                  Reduce activities
+                </div>
+                <div class="suggestion-chip">
+                  <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+                  Adjust dates
+                </div>
+                <div class="suggestion-chip">
+                  <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+                  Increase budget
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="input-bar">
+            <div class="input-inner">
+              <button class="mic-btn">
+                <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+              </button>
+              <input type="text" placeholder="Type your message..." />
+              <button class="input-btn">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== MEETING PREP ==================== -->
+        <div id="screen-meeting" class="screen">
+          <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="status-icons">
+              <svg viewBox="0 0 24 24"><path d="M1.5 8.43l2.12 2.12C4.93 9.24 6.36 8.5 8 8.5s3.07.74 4.38 2.05l2.12-2.12C12.79 6.72 10.51 5.5 8 5.5S3.21 6.72 1.5 8.43zm6.5 9.07l2-2-2-2-2 2 2 2zm4.24-4.24l2.12-2.12C13.07 9.86 10.62 9 8 9s-5.07.86-6.86 2.14l2.12 2.12C4.51 12.41 6.18 12 8 12s3.49.41 4.74 1.26z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+          </div>
+          <div class="nav-bar">
+            <button class="nav-back" onclick="showScreen('now')">
+              <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+              Back
+            </button>
+            <span class="nav-title" style="font-size:13px;color:var(--text-muted);">Meeting Mode</span>
+            <div class="status-dot"></div>
+          </div>
+          <div class="meeting-hero">
+            <h1>Design Team Meeting</h1>
+            <div class="meeting-meta">Friday, June 28 · 2:00 PM · In 5 minutes</div>
+            <button class="btn btn-primary btn-full" style="margin-bottom:0;">
+              <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:white;"><path d="M17 10.5V7c0-.55-.45-1-1-1H4c-.55 0-1 .45-1 1v10c0 .55.45 1 1 1h12c.55 0 1-.45 1-1v-3.5l4 4v-11l-4 4z"/></svg>
+              Join Zoom
+            </button>
+          </div>
+          <div class="meeting-section">
+            <div class="section-label">Agenda</div>
+            <div class="agenda-item"><div class="agenda-num">1</div><span class="agenda-text">Q3 Launch Timeline Review</span></div>
+            <div class="agenda-item"><div class="agenda-num">2</div><span class="agenda-text">Wireframe Feedback</span></div>
+            <div class="agenda-item"><div class="agenda-num">3</div><span class="agenda-text">Resource Allocation</span></div>
+            <div class="agenda-item"><div class="agenda-num">4</div><span class="agenda-text">Next Steps &amp; Action Items</span></div>
+          </div>
+          <div class="meeting-section">
+            <div class="section-label">Attendees</div>
+            <div class="attendees-row">
+              <div class="attendee">
+                <div class="attendee-avatar organizer">SJ<div class="attendee-status"></div></div>
+                <div class="attendee-name">Sarah Jenkins</div>
+                <div class="attendee-role">Organizer</div>
+              </div>
+              <div class="attendee">
+                <div class="attendee-avatar">MC<div class="attendee-status"></div></div>
+                <div class="attendee-name">Marcus Chen</div>
+              </div>
+              <div class="attendee">
+                <div class="attendee-avatar">PP<div class="attendee-status" style="background:var(--accent-orange);"></div></div>
+                <div class="attendee-name">Priya Patel</div>
+              </div>
+              <div class="attendee">
+                <div class="attendee-avatar">JL<div class="attendee-status" style="background:var(--text-muted);"></div></div>
+                <div class="attendee-name">James Liu</div>
+              </div>
+            </div>
+            <div class="context-card" style="margin-top:12px;">
+              <div class="context-avatar">SJ</div>
+              <div class="context-info">
+                <div class="context-name">Sarah Jenkins</div>
+                <div class="context-detail">Last email: 11:23 PM about Q3 Budget</div>
+                <div class="context-detail">Shared projects: 3 · Relationship: 8 months</div>
+              </div>
+              <div class="context-link">View →</div>
+            </div>
+          </div>
+          <div class="meeting-section">
+            <div class="section-label">Relevant Assets</div>
+            <div class="assets-row">
+              <div class="asset-card"><div class="asset-icon">🎨</div><div class="asset-name">Wireframes v3</div></div>
+              <div class="asset-card"><div class="asset-icon">📊</div><div class="asset-name">Q3 Timeline</div></div>
+              <div class="asset-card"><div class="asset-icon">💰</div><div class="asset-name">Budget Sheet</div></div>
+              <div class="asset-card"><div class="asset-icon">📝</div><div class="asset-name">Meeting Notes</div></div>
+            </div>
+          </div>
+          <div class="quick-actions">
+            <button class="btn btn-ghost" style="font-size:12px;padding:8px 12px;">📞 Call instead</button>
+            <button class="btn btn-ghost" style="font-size:12px;padding:8px 12px;">🔄 Reschedule</button>
+            <button class="btn btn-danger" style="font-size:12px;padding:8px 12px;">✕ Decline</button>
+          </div>
+          <div class="input-bar">
+            <div class="input-inner">
+              <button class="mic-btn">
+                <svg viewBox="0 0 24 24"><path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/></svg>
+              </button>
+              <input type="text" placeholder="Ask Tony anything..." />
+              <button class="input-btn">
+                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== THE ATLAS ==================== -->
+        <div id="screen-atlas" class="screen">
+          <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="status-icons">
+              <svg viewBox="0 0 24 24"><path d="M1.5 8.43l2.12 2.12C4.93 9.24 6.36 8.5 8 8.5s3.07.74 4.38 2.05l2.12-2.12C12.79 6.72 10.51 5.5 8 5.5S3.21 6.72 1.5 8.43zm6.5 9.07l2-2-2-2-2 2 2 2zm4.24-4.24l2.12-2.12C13.07 9.86 10.62 9 8 9s-5.07.86-6.86 2.14l2.12 2.12C4.51 12.41 6.18 12 8 12s3.49.41 4.74 1.26z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+          </div>
+          <div class="nav-bar">
+            <button class="nav-back" onclick="showScreen('now')">
+              <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+              Back
+            </button>
+            <span class="nav-title">The Atlas</span>
+            <button class="nav-icon">
+              <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            </button>
+          </div>
+          <div class="search-bar">
+            <svg viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
+            <input type="text" placeholder="Search people, projects, topics..." value="Q3 Budget" />
+          </div>
+          <div class="atlas-section">
+            <div class="section-label">Recent</div>
+            <div class="chip-row">
+              <div class="pill"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> Sarah Jenkins</div>
+              <div class="pill"><svg viewBox="0 0 24 24"><path d="M20 6h-2.18c.07-.44.18-.88.18-1.33C18 2.54 15.96.5 13.5.5c-1.38 0-2.59.56-3.5 1.46C9.09 1.06 7.88.5 6.5.5 4.04.5 2 2.54 2 4.67c0 .45.11.89.18 1.33H0v14h20V6zm-7.5-4c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zM6.5 2.5c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zM2 18V8h7v10H2zm9 0V8h7v10h-7z"/></svg> Q3 Budget</div>
+              <div class="pill"><svg viewBox="0 0 24 24"><path d="M21 3L3 10.53v.98l6.84 2.65L12.48 21h.98L21 3z"/></svg> Japan Trip</div>
+            </div>
+          </div>
+          <div class="atlas-section">
+            <div class="section-label">Results for "Q3 Budget"</div>
+            <div class="result-card">
+              <div class="result-icon doc">
+                <svg viewBox="0 0 24 24"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>
+              </div>
+              <div class="result-body">
+                <div class="result-title">Q3 Budget Proposal</div>
+                <div class="result-meta">Google Doc · Modified 3 days ago</div>
+                <div class="result-pills">
+                  <span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> Sarah Jenkins</span>
+                  <span class="pill"><svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg> Finance Team</span>
+                </div>
+              </div>
+            </div>
+            <div class="result-card">
+              <div class="result-icon email">
+                <svg viewBox="0 0 24 24"><path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg>
+              </div>
+              <div class="result-body">
+                <div class="result-title">Email Thread: Q3 Budget Review</div>
+                <div class="result-meta">5 messages · Last: 11:23 PM</div>
+                <div class="result-pills">
+                  <span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> Sarah Jenkins</span>
+                </div>
+              </div>
+            </div>
+            <div class="result-card" onclick="showScreen('meeting')">
+              <div class="result-icon cal">
+                <svg viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
+              </div>
+              <div class="result-body">
+                <div class="result-title">Q3 Budget Finalization Meeting</div>
+                <div class="result-meta">Friday, June 28 at 2:00 PM</div>
+                <div class="result-pills">
+                  <span class="pill">Sarah</span>
+                  <span class="pill">Marcus</span>
+                  <span class="pill">+2</span>
+                </div>
+              </div>
+            </div>
+            <div class="result-card">
+              <div class="result-icon chat">
+                <svg viewBox="0 0 24 24"><path d="M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2z"/></svg>
+              </div>
+              <div class="result-body">
+                <div class="result-title">Slack Messages (3)</div>
+                <div class="result-meta">Last: "Do we have board approval?"</div>
+                <div class="result-pills">
+                  <span class="pill"><svg viewBox="0 0 24 24"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg> Marcus Chen</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==================== EMAIL DETAIL ==================== -->
+        <div id="screen-email-detail" class="screen">
+          <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="status-icons">
+              <svg viewBox="0 0 24 24"><path d="M1.5 8.43l2.12 2.12C4.93 9.24 6.36 8.5 8 8.5s3.07.74 4.38 2.05l2.12-2.12C12.79 6.72 10.51 5.5 8 5.5S3.21 6.72 1.5 8.43zm6.5 9.07l2-2-2-2-2 2 2 2zm4.24-4.24l2.12-2.12C13.07 9.86 10.62 9 8 9s-5.07.86-6.86 2.14l2.12 2.12C4.51 12.41 6.18 12 8 12s3.49.41 4.74 1.26z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+          </div>
+          <div class="nav-bar">
+            <button class="nav-back" onclick="showScreen('now')">
+              <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+              Back
+            </button>
+            <span class="nav-title">Email Draft</span>
+            <button class="nav-icon">
+              <svg viewBox="0 0 24 24"><path d="M18 16.08c-.76 0-1.44.3-1.96.77L8.91 12.7c.05-.23.09-.46.09-.7s-.04-.47-.09-.7l7.05-4.11c.54.5 1.25.81 2.04.81 1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3c0 .24.04.47.09.7L8.04 9.81C7.5 9.31 6.79 9 6 9c-1.66 0-3 1.34-3 3s1.34 3 3 3c.79 0 1.5-.31 2.04-.81l7.12 4.16c-.05.21-.08.43-.08.65 0 1.61 1.31 2.92 2.92 2.92 1.61 0 2.92-1.31 2.92-2.92s-1.31-2.92-2.92-2.92z"/></svg>
+            </button>
+          </div>
+          <div class="detail-section">
+            <div class="section-label">Original Email</div>
+            <div class="email-card">
+              <div class="email-from">
+                <div class="email-avatar">SJ</div>
+                <div>
+                  <div class="email-from-name">Sarah Jenkins</div>
+                  <div class="email-from-time">Received 11:23 PM</div>
+                </div>
+              </div>
+              <div class="email-subject">Subject: Q3 Budget Review</div>
+              <div class="email-body">Hi, can we schedule a meeting to review the Q3 budget? I'm available Friday at 2 PM or Monday at 10 AM.<br><br>Thanks,<br>Sarah</div>
+            </div>
+          </div>
+          <div class="detail-section" style="margin-top:16px;">
+            <div class="draft-label">Tony's Draft Reply</div>
+            <div class="draft-card">
+              <div class="draft-body">Hi Sarah,<br><br>Friday at 2 PM works perfectly for me. I've blocked the time on my calendar. Looking forward to discussing the Q3 budget with you.<br><br>Best,<br>You</div>
+            </div>
+          </div>
+          <div class="detail-section" style="margin-top:16px;">
+            <div class="section-label">Why This Draft?</div>
+            <div class="card">
+              <div class="reasoning-item">
+                <div class="reasoning-check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+                <div class="reasoning-text">Matches your communication style (professional, warm)</div>
+              </div>
+              <div class="reasoning-item">
+                <div class="reasoning-check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+                <div class="reasoning-text">Friday 2 PM aligns with your calendar (no conflicts)</div>
+              </div>
+              <div class="reasoning-item">
+                <div class="reasoning-check"><svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg></div>
+                <div class="reasoning-text">Tone matches your previous 12 emails with Sarah</div>
+              </div>
+            </div>
+          </div>
+          <div class="detail-actions">
+            <button class="btn btn-primary btn-full">Send Now</button>
+            <button class="btn btn-ghost btn-full">Edit Draft</button>
+            <button class="btn btn-danger btn-full" style="background:transparent;border:none;">Discard</button>
+          </div>
+        </div>
+
+        <!-- ==================== SETTINGS ==================== -->
+        <div id="screen-settings" class="screen">
+          <div class="status-bar">
+            <span class="time">9:41</span>
+            <div class="status-icons">
+              <svg viewBox="0 0 24 24"><path d="M1.5 8.43l2.12 2.12C4.93 9.24 6.36 8.5 8 8.5s3.07.74 4.38 2.05l2.12-2.12C12.79 6.72 10.51 5.5 8 5.5S3.21 6.72 1.5 8.43zm6.5 9.07l2-2-2-2-2 2 2 2zm4.24-4.24l2.12-2.12C13.07 9.86 10.62 9 8 9s-5.07.86-6.86 2.14l2.12 2.12C4.51 12.41 6.18 12 8 12s3.49.41 4.74 1.26z"/></svg>
+              <svg viewBox="0 0 24 24"><path d="M15.67 4H14V2h-4v2H8.33C7.6 4 7 4.6 7 5.33v15.33C7 21.4 7.6 22 8.33 22h7.33c.74 0 1.34-.6 1.34-1.33V5.33C17 4.6 16.4 4 15.67 4z"/></svg>
+            </div>
+          </div>
+          <div class="nav-bar">
+            <button class="nav-back" onclick="showScreen('now')">
+              <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+              Back
+            </button>
+            <span class="nav-title">Settings</span>
+            <div style="width:22px;"></div>
+          </div>
+          <div class="profile-card">
+            <div class="profile-avatar">SC</div>
+            <div>
+              <div class="profile-name">Sarah Chen</div>
+              <div class="profile-email">sarah@company.com</div>
+              <div class="plan-badge">⭐ Premium Plan</div>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="section-label">Connected Integrations</div>
+            <div class="integration-row">
+              <div class="integration-icon" style="background:#fff;font-size:20px;">G</div>
+              <div class="integration-info">
+                <div class="integration-name">Gmail</div>
+                <div class="integration-status"><div class="dot-green"></div><span class="status-connected">Connected</span> · sarah@company.com</div>
+              </div>
+              <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">Manage</button>
+            </div>
+            <div class="integration-row">
+              <div class="integration-icon" style="background:#4285f4;font-size:16px;color:white;font-weight:700;">📅</div>
+              <div class="integration-info">
+                <div class="integration-name">Google Calendar</div>
+                <div class="integration-status"><div class="dot-green"></div><span class="status-connected">Connected</span> · Last sync 2 min ago</div>
+              </div>
+              <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">Manage</button>
+            </div>
+            <div class="integration-row">
+              <div class="integration-icon" style="background:#ff3b30;font-size:20px;">❤️</div>
+              <div class="integration-info">
+                <div class="integration-name">Apple Health</div>
+                <div class="integration-status"><div class="dot-green"></div><span class="status-connected">Connected</span> · Sleep, Activity</div>
+              </div>
+              <button class="btn btn-ghost" style="font-size:12px;padding:6px 12px;">Manage</button>
+            </div>
+            <div class="integration-row">
+              <div class="integration-icon" style="background:#4a154b;font-size:20px;">💬</div>
+              <div class="integration-info">
+                <div class="integration-name">Slack</div>
+                <div class="integration-status"><div class="dot-gray"></div><span class="status-disconnected">Not connected</span></div>
+              </div>
+              <button class="btn btn-primary" style="font-size:12px;padding:6px 12px;">Connect</button>
+            </div>
+            <div class="integration-row">
+              <div class="integration-icon" style="background:#fff;font-size:20px;">📋</div>
+              <div class="integration-info">
+                <div class="integration-name">Notion</div>
+                <div class="integration-status"><div class="dot-gray"></div><span class="status-disconnected">Not connected</span></div>
+              </div>
+              <button class="btn btn-primary" style="font-size:12px;padding:6px 12px;">Connect</button>
+            </div>
+          </div>
+          <div class="settings-section">
+            <div class="section-label">Privacy &amp; Security</div>
+            <div class="settings-row">
+              <div class="settings-row-icon blue"><svg viewBox="0 0 24 24"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></svg></div>
+              <span class="settings-row-label">End-to-End Encryption</span>
+              <div class="toggle"></div>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-icon blue"><svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg></div>
+              <span class="settings-row-label">Data Retention</span>
+              <span class="settings-row-value">90 days ›</span>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-icon blue"><svg viewBox="0 0 24 24"><path d="M19 9h-4V3H9v6H5l7 7 7-7zM5 18v2h14v-2H5z"/></svg></div>
+              <span class="settings-row-label">Download My Data</span>
+              <span class="settings-row-value">›</span>
+            </div>
+            <div class="settings-row">
+              <div class="settings-row-icon red"><svg viewBox="0 0 24 24"><path d="M6 19c0 1.1.9 2 2 2h8c1.1 0 2-.9 2-2V7H6v12zM19 4h-3.5l-1-1h-5l-1 1H5v2h14V4z"/></svg></div>
+              <span class="settings-row-label danger">Delete All Data</span>
+              <span class="settings-row-value" style="color:var(--accent-red);">›</span>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /phone-screen -->
+    </div><!-- /phone-shell -->
+    <div class="prototype-label">Tony · Interactive Prototype v1.0</div>
+  </div><!-- /relative wrapper -->
+
+</div><!-- /phone-wrapper -->
+
+<script>
+  function showScreen(name) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('screen-' + name);
+    if (target) {
+      target.classList.add('active');
+      target.scrollTop = 0;
+    }
+    // Update sidebar active state
+    document.querySelectorAll('.sidebar-item').forEach(item => {
+      item.classList.remove('active');
+    });
+    const screenNames = {
+      'onboarding': 0, 'now': 1, 'stream': 2, 'meeting': 3,
+      'atlas': 4, 'email-detail': 5, 'settings': 6
+    };
+    const idx = screenNames[name];
+    if (idx !== undefined) {
+      const items = document.querySelectorAll('.sidebar-item');
+      if (items[idx]) items[idx].classList.add('active');
+    }
+  }
+</script>
+</body>
+</html>
