@@ -4,20 +4,44 @@
 
 ---
 
-## Stop - Tony V1 Offline Product Complete
+## Overnight Tony V1 Offline Hardening
 
-**What:** Do not continue building unless a new mission explicitly reopens scope.
+Read first:
 
-**Context:** Tony V1 is complete as an offline local-first SwiftUI product. It uses SwiftData, AI Inbox capture, `MockProvider`, Decision Queue, Morning Brief, local item actions, and demo data. It requires no API keys and no network providers.
+- `docs/OVERNIGHT_AGENT_MISSION.md`
+- `docs/STATUS.md`
+- `docs/V1_MOCK_MVP_QA.md`
+- `ios/TonyV1/`
 
-**Do NOT:**
+## Mission
+
+Continue working until morning on safe offline hardening only.
+
+Complete as much as possible from `docs/OVERNIGHT_AGENT_MISSION.md`.
+
+## Do NOT
+
 - Do not request API keys.
 - Do not create `.env.local`.
-- Do not add OpenAI, Claude, Gemini, or any other network provider.
-- Do not build Share Extension yet.
-- Do not attempt LINE notification interception.
-- Do not build VIP Filter.
-- Do not add push notifications or background automation.
+- Do not add OpenAI, Claude, Gemini, or any network provider.
+- Do not add backend, login, cloud sync, LINE interception, VIP filter, push notifications, or background automation.
+- Do not rewrite the app from scratch.
 
-**If work resumes later:**
-Start from a new explicit mission. The only intended replaceable boundary is `AIProvider`.
+## When Complete
+
+Update:
+
+- `docs/STATUS.md`
+- `docs/NEXT_ACTION.md`
+- `docs/CHANGELOG.md`
+- `docs/V1_MOCK_MVP_QA.md`
+
+Set final status to one of:
+
+- `V1_OFFLINE_MVP_HARDENED`
+- `V1_OFFLINE_MVP_PARTIAL_HARDENING`
+- `V1_BLOCKED_NEEDS_MAC_XCODE`
+
+If blocked, update `docs/BLOCKERS.md`.
+
+Do not stop after one small change. Continue through the work queue until no more safe offline work remains.
