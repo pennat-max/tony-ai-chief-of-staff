@@ -2,75 +2,83 @@
 
 **Building the world's most intelligent personal operating system.**
 
-Tony is an AI Chief of Staff designed to help users manage their entire life, business, health, relationships, money, projects, and decisions through one unified AI companion. Unlike generic AI assistants, Tony understands context automatically and requires zero manual organization.
+> **v2 focuses on Tony for พี่คอม as the first real user.**
+
+Tony is an AI Chief of Staff designed to manage life, business, health, relationships, money, projects, and decisions through one unified AI companion. Unlike generic AI assistants, Tony understands context automatically and requires zero manual organization.
 
 ## What Tony Is
 
 Tony is **not** an ERP. Tony is **not** a chatbot. Tony is **not** another AI assistant.
 
-Tony is an ambient intelligence — a proactive, context-aware Chief of Staff that operates continuously in the background, anticipating needs, managing information flow, and facilitating better decisions. The user never needs to manually organize information. Tony understands context automatically.
+Tony is an ambient intelligence — a proactive, context-aware Chief of Staff that operates continuously in the background, anticipating needs, managing information flow, and facilitating better decisions.
+
+## The First Real User: พี่คอม
+
+Version 2 of Tony is no longer designed for a generic "VP of Product." It is designed around the real life of **พี่คอม**, a portfolio operator managing VIGO4U, vehicle export, AI software projects, a farm/homestay, personal wealth, health, and relationships — primarily from an iPhone, primarily through LINE.
+
+All v2 product decisions, UX rules, and AI behavior are grounded in his specific reality. The `docs/` directory contains the complete real-user product model.
 
 ## Repository Structure
 
-This repository contains the complete product design, strategy, and specifications for Tony, organized for future AI agents and engineering teams to continue from.
-
 | Directory | Contents |
 | :--- | :--- |
+| `docs/` | **[NEW — v2]** Real-user product model for พี่คอม |
 | `research/` | User research, competitive analysis, market insights |
-| `strategy/` | Product vision, philosophy, core principles, product strategy, V2 iteration |
-| `design/` | Information architecture, AI behavior, UX design, design system, wireframes, high-fidelity mockups |
-| `design/mockups/` | 7 high-fidelity PNG mockups at 1440×2560px |
-| `prototype/` | Fully interactive HTML/CSS prototype (all 6 core screens) |
+| `strategy/` | Product vision, philosophy, core principles, strategy, V2 critique |
+| `design/` | Information architecture, AI behavior, UX design, design system, wireframes, mockups |
+| `design/mockups/` | High-fidelity PNG mockups (v1 and v2) |
+| `prototype/` | Fully interactive HTML/CSS prototype |
 | `engineering/` | Developer handoff: design tokens, component specs, API contracts |
 
-## Product Philosophy: Ambient Clarity
+## The `docs/` Directory: Tony for พี่คอม (v2)
 
-The design language and product philosophy are rooted in **Ambient Clarity** — the interface recedes into the background, allowing synthesized information and AI recommendations to be the sole focus. The product must feel like a trusted, competent colleague, not a tool.
+These 7 documents define the real product. Any AI agent or engineer continuing this work **must read these first**.
 
-## Core Principles
-
-1. **Unified Context** — One AI that knows everything about the user
-2. **Zero Manual Organization** — Information flows in naturally, never requiring manual filing
-3. **Proactive Intelligence** — Tony anticipates needs before the user asks
-4. **Absolute Privacy** — End-to-end encryption, user-controlled data deletion
-5. **Graceful Degradation** — When uncertain, Tony prepares options rather than executing or failing
-6. **Confidence Transparency** — Tony always shows its reasoning
-
-## Three Core Views
-
-| View | Purpose |
+| Document | Purpose |
 | :--- | :--- |
-| **The Now** | Ambient dashboard; context-adaptive daily brief |
-| **The Stream** | Conversational interaction layer; natural language input |
-| **The Atlas** | Knowledge Graph explorer; unified search across all data |
+| `docs/TONY_FOR_PEEKOM.md` | The master brief: who พี่คอม is and what Tony must become for him |
+| `docs/LIFE_MODEL.md` | The 7 domains of พี่คอม's life and how Tony maps context to each |
+| `docs/MORNING_FLOW.md` | The morning routine design: LINE interception, VIP surfacing, health anchor |
+| `docs/RELATIONSHIP_PRIORITY_MODEL.md` | The 4-tier model for ranking contacts and filtering noise |
+| `docs/AI_ACTION_RULES.md` | The "CEO Decision" threshold: when Tony acts silently vs. asks |
+| `docs/MOBILE_ONLY_UX_RULES.md` | iPhone-first UX constraints: 4 components, no settings menus, voice-first |
+| `docs/V2_PRODUCT_DECISIONS.md` | The MVP scope (V2.1) and 3-phase roadmap |
 
-## Deliverables Completed (v1.0)
+## Product Philosophy: Typographic Calm
 
-- [x] First Principles Thinking (`strategy/01_FIRST_PRINCIPLES.md`)
-- [x] User Research (`research/01_USER_RESEARCH.md`)
-- [x] Competitive Analysis (`research/02_COMPETITIVE_ANALYSIS.md`)
-- [x] Product Vision & Strategy (`strategy/02_PRODUCT_VISION_STRATEGY.md`)
-- [x] Information Architecture & AI Behavior (`design/01_IA_AND_AI_BEHAVIOR.md`)
-- [x] User Experience Design (`design/02_UX_DESIGN.md`)
-- [x] Design Language & Design System (`design/03_DESIGN_SYSTEM.md`)
-- [x] Wireframes — 6 core screens (`design/04_WIREFRAMES.md`)
-- [x] High-Fidelity Mockups — 7 screens at 1440×2560px (`design/05_HI_FI_MOCKUPS.md`)
-- [x] Interactive Prototype — 6 fully clickable screens (`prototype/index.html`)
-- [x] Developer Handoff — Tokens, components, API contracts (`engineering/01_DEVELOPER_HANDOFF.md`)
-- [x] Version 2 Iteration & Critique (`strategy/03_V2_ITERATION_CRITIQUE.md`)
+The v2 design language is **Typographic Calm** — pure black canvas, no cards or borders, editorial serif typography, color reserved exclusively for actionable elements. The interface must feel like a beautifully typeset document that happens to be intelligent.
+
+## Core Principles (v2)
+
+| Principle | Implementation |
+| :--- | :--- |
+| **Radical Reduction** | No tabs, no dashboards. One vertical stream. |
+| **Explainable AI** | Every action Tony takes includes a one-line "why." |
+| **Protect the Flow** | Tony defends the morning run and fasting window as aggressively as a CEO meeting. |
+| **Single-Domain Mastery** | V2.1 masters LINE interception before touching email, calendar, or finance. |
+
+## Three Core Views (Adapted for v2)
+
+| View | V1 Purpose | V2 Adaptation for พี่คอม |
+| :--- | :--- | :--- |
+| **The Now** | Ambient daily brief | The Morning Triage: LINE filter + Health Anchor |
+| **The Stream** | Conversational input | Voice dictation for replies and commands |
+| **The Atlas** | Knowledge Graph explorer | **Removed from MVP.** Replaced by inline Context Peek overlays. |
 
 ## For Future AI Agents
 
-If you are an AI agent continuing this work, start by reading the following documents in order:
+If you are an AI agent continuing this work, read these documents in order:
 
-1. `strategy/01_FIRST_PRINCIPLES.md` — Understand the fundamental problem Tony solves
-2. `strategy/02_PRODUCT_VISION_STRATEGY.md` — Understand the product vision and phased strategy
-3. `design/01_IA_AND_AI_BEHAVIOR.md` — Understand the Knowledge Graph and AI behavior model
-4. `design/03_DESIGN_SYSTEM.md` — Understand the design tokens before modifying any UI
-5. `strategy/03_V2_ITERATION_CRITIQUE.md` — Understand what needs to be built next
+1. `docs/TONY_FOR_PEEKOM.md` — Understand the real user before touching anything else.
+2. `docs/LIFE_MODEL.md` — Understand the 7 domains Tony must navigate.
+3. `docs/MORNING_FLOW.md` — Understand the MVP interaction flow.
+4. `docs/AI_ACTION_RULES.md` — Understand the autonomy boundaries.
+5. `docs/V2_PRODUCT_DECISIONS.md` — Understand the MVP scope and what is cut.
+6. `strategy/02_PRODUCT_VISION_STRATEGY.md` — The broader vision and 3-phase strategy.
+7. `design/03_DESIGN_SYSTEM.md` — Design tokens before modifying any UI.
 
-The next priority is implementing the V2 improvements outlined in `strategy/03_V2_ITERATION_CRITIQUE.md`, particularly the "Cold Start" onboarding flow and the Confidence Threshold trust mechanism.
+The next engineering priority is the **LINE API integration (read-only)** and the **Morning Triage UI** as defined in `docs/MORNING_FLOW.md` and `docs/V2_PRODUCT_DECISIONS.md`.
 
 ---
 
-**Status:** v1.0 Complete | **Last Updated:** June 28, 2026 | **Author:** Manus AI (Founding Product Team)
+**Status:** v2.1 Product Definition Complete | **Last Updated:** June 28, 2026 | **Author:** Manus AI (Founding Product Team)
