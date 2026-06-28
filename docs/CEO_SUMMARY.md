@@ -1,39 +1,37 @@
-# CEO Summary: Tony — AI Chief of Staff
+# CEO Summary: Tony V1 (The 30-Day MVP)
 
 **Date:** June 28, 2026
-**Prepared by:** Manus AI — Founding Product Team
-**Status:** Product Definition Complete. Ready for Engineering.
+**Prepared by:** Manus AI — Product Owner
+**Status:** Scoped and Ready for iOS Engineering.
 
 ---
 
-## What We Are Building
+## The Pivot: From Vision to Reality
 
-Tony is a personal AI Chief of Staff built for พี่คอม. It is not a chatbot, not an ERP, and not another AI assistant. Tony is the intelligent layer that sits between พี่คอม and the noise of managing VIGO4U, vehicle export, AI projects, a farm, personal wealth, health, and relationships — all from an iPhone.
+We have paused the grand vision of the "AI Chief of Staff." Building a complex system with databases, multi-domain ontologies, and API write-access is a multi-month endeavor with high failure risk. 
 
-The single sentence that defines Tony: **Tony handles everything that doesn't require a CEO decision, so that พี่คอม only ever has to make CEO decisions.**
+Instead, we are building exactly one thing, for one user, in 30 days.
 
-## The Problem We Are Solving
+## The 30-Day Product: The LINE VIP Filter
 
-พี่คอม wakes up every morning to 100+ LINE messages, 40+ emails, and multiple system alerts across six businesses. He must manually parse this noise to find the 3 things that actually matter. This costs him 30–60 minutes of cognitive energy before his day has even begun. Tony eliminates this entirely.
+พี่คอม's biggest pain point is opening LINE in the morning and facing 100+ unread messages. 
 
-## The MVP (V2.1): The LINE Interceptor
+**Tony V1 is a standalone iOS app that does only this:**
+1. It intercepts incoming LINE notifications overnight.
+2. It checks the sender against a hardcoded list of 10 VIPs.
+3. In the morning, it displays a pure black screen showing *only* the VIP messages, plus a 2-sentence AI summary of the rest.
+4. It provides a microphone button to dictate a reply, which Tony translates to professional Thai and copies to the clipboard.
+5. At midnight, it deletes everything and starts over.
 
-The first version of Tony does one thing flawlessly: it reads every incoming LINE message overnight, filters them through a 4-tier relationship priority model, and presents พี่คอม with a clean, 60-second morning brief when he wakes up.
+No databases. No accounts. No settings menus. No complex AI reasoning. Just peace of mind every morning.
 
-Tony surfaces VIP messages in full. It synthesizes group chat noise into single sentences. It logs farm receipts automatically. It stays completely silent during the morning run. The only time Tony interrupts is when a true CEO decision is required — and when it does, it has already prepared the answer.
+## The Technical Reality
 
-## Why This Approach Wins
+To hit the 30-day deadline, we are making brutal engineering trade-offs:
+*   **No backend:** All logic runs locally on the iPhone, making direct API calls to OpenAI/Anthropic.
+*   **Read-Only:** Tony cannot send messages. It only copies text to the clipboard for พี่คอม to paste into LINE. This guarantees zero catastrophic errors in V1.
+*   **The iOS Sandbox Hack:** Because Apple prevents apps from reading other apps' notifications, the engineering team's first task is to build an iOS Shortcut Automation that silently passes LINE messages to the Tony app.
 
-Every existing AI assistant (Siri, ChatGPT, Gemini) waits to be asked. Tony acts before being asked. The difference is not a feature — it is a fundamentally different relationship with technology. After five years, Tony knows พี่คอม's patterns, his key relationships, his financial baselines, and his health routines well enough to act as a genuine Chief of Staff, not a search engine.
+## Next Steps
 
-## What Has Been Completed
-
-The founding product team has completed the full product definition: first principles thinking, user research, competitive analysis, product vision and strategy, information architecture, AI behavior model, design system, wireframes, high-fidelity mockups, an interactive prototype, a developer handoff document, and 10 real-user product documents built around พี่คอม's specific life. All work is committed to GitHub at `pennat-max/tony-ai-chief-of-staff`.
-
-## What Is Needed Next
-
-An engineering team must now build the LINE Interception Engine (REQ-1 in `docs/REQUIREMENTS_FROM_NARRATIVE.md`). This is the critical path. All other features depend on it. The primary technical risk is LINE API access limitations, which are documented with three viable workarounds in `docs/BLOCKERS.md`.
-
-## The Opportunity
-
-The first person who wakes up and reaches for Tony instead of LINE is the proof of concept. That person is พี่คอม. Build it for one person first. Build it so well that they cannot imagine their morning without it. Then scale.
+We need an iOS engineer immediately. Week 1 is entirely dedicated to proving we can intercept LINE messages via iOS Shortcuts and pass them to a blank SwiftUI app. If we win Week 1, we ship in 30 days.

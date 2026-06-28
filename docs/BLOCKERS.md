@@ -4,24 +4,23 @@
 
 ## Active Blockers
 
-### BLOCKER-1: LINE API Access (Critical)
-LINE does not provide a public API for reading messages from a user's personal LINE account. The LINE Messaging API is for business accounts (LINE Official Accounts) only.
+### BLOCKER-1: iOS Notification Interception Constraints (High Risk)
+iOS heavily restricts an app's ability to read notifications intended for other apps (like LINE). While an app can read its *own* notifications, reading *all* notifications system-wide is generally restricted to MDM (Mobile Device Management) profiles, Accessibility features, or specific entitlements not available to standard App Store apps.
 
-**Impact:** The entire MVP (V2.1) depends on reading LINE messages. Without this, the Morning Triage cannot be built as designed.
+**Impact:** The core premise of the 30-day MVP relies on this.
 
 **Possible Paths Forward:**
-1. **iOS Notification Access:** Use iOS notification access permissions to read LINE notification content as it arrives. This is the most feasible path and does not require LINE's cooperation. Limitation: only captures messages that generate a notification, not historical messages.
-2. **LINE Business Connect:** Explore whether พี่คอม's key business contacts can be migrated to a LINE Official Account channel, which does have API access.
-3. **Accessibility Service (Android):** If an Android device is acceptable, Android Accessibility Services can read on-screen content from any app. This is more powerful but raises privacy concerns.
-4. **Manual Forward Workflow:** As a V2.1 fallback, users can forward important LINE messages to a dedicated Tony email address or LINE bot. This is low-tech but deployable immediately.
+1. **The Shortcuts / Automations Hack:** Use iOS Shortcuts. Create a personal automation triggered by "When I receive a message from [App: LINE]". The shortcut passes the message content to the Tony app via a URL scheme or App Intent. This is clunky to set up but bypasses Apple's security sandbox legitimately.
+2. **The Notification Extension:** Investigate if a Notification Service Extension can be abused to read incoming payloads, though this is unlikely to work across apps.
+3. **The Screen Recording Hack:** Require the user to leave the phone plugged in and screen-recording overnight, using OCR to read the banners. (Too much friction, reject).
 
-**Recommended Path:** Start with iOS Notification Access (Path 1) for V2.1. Design the product so it degrades gracefully when notification access is unavailable.
+**Recommended Path:** The next engineer MUST immediately investigate Path 1 (iOS Shortcuts Automation) as the primary ingestion method for V1.
 
-### BLOCKER-2: No Engineering Team Yet (High)
-There is currently no engineer assigned to build Tony. The product definition is complete and ready for engineering, but no development has started.
+### BLOCKER-2: No iOS Engineer Assigned (High)
+The project requires an engineer proficient in Swift, SwiftUI, and iOS system-level constraints (Notifications, Shortcuts, App Intents).
 
-**Impact:** All timelines are blocked until an engineer or development agent is assigned.
+**Impact:** Development cannot start.
 
 ## Resolved Blockers
 
-None yet — this is the first iteration.
+- **LINE API Access:** Resolved by abandoning the API approach entirely. V1 will rely exclusively on on-device notification interception (or Shortcuts).

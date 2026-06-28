@@ -1,35 +1,24 @@
 # Tony Project Status
 
-**Status: READY_FOR_CTO_REVIEW**
+**Status: READY_FOR_V1_ENGINEERING**
 
 **Last Updated:** June 28, 2026
-**Last Agent:** Manus AI — Founding Product Team
-**Current Phase:** Product Definition Complete (v2.1)
+**Last Agent:** Manus AI — Product Owner
+**Current Phase:** 30-Day MVP Definition Complete
 
 ## What is Done
 
-The product has been fully defined from first principles through lived experience. The repository contains:
+The product has been radically scoped down to a 30-day MVP. All grand "AI Chief of Staff" features have been stripped away to focus on a single, deployable utility for one user. The repository contains:
 
-- Complete product vision, philosophy, and strategy (v1 and v2)
-- User research and competitive analysis
-- Information architecture and AI behavior model
-- Design system (Typographic Calm)
-- High-fidelity mockups (v1 and v2, 9 screens total)
-- Interactive HTML prototype (v1)
-- Developer handoff document
-- 10 real-user product documents in `docs/` for พี่คอม as the first user
-- 24-hour lived experience narrative
-- 7 engineering requirements extracted from the narrative
-- UI direction derived from requirements (not the other way around)
+- `docs/V1_PRODUCT_OWNER_DECISIONS.md` — The absolute source of truth for what we are actually building right now.
+- A 4-week engineering roadmap for a native iOS app.
+- Clear definitions of what is IN and OUT of scope for the next 30 days.
 
 ## What is NOT Done
 
-- No code has been written
-- No backend has been built
-- No LINE API integration exists
-- No iOS app exists
-- The prototype is HTML only, not a native app
+- No iOS code has been written.
+- TestFlight environment is not set up.
 
 ## Current Confidence Level
 
-The product definition is strong enough to begin engineering. The MVP scope is clearly bounded in `docs/V2_PRODUCT_DECISIONS.md`.
+High. By removing databases, backend infrastructure, user authentication, and write-access APIs, the remaining scope (iOS Notification Interception + LLM API call) is highly achievable within 30 days.
